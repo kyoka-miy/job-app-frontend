@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./components/login/login";
 
 function App() {
 
@@ -8,12 +9,10 @@ function App() {
         <Routes>
           <Route
             path="/"
-            // exact
-            // element={
-            //   <Feed
-            //     setSelectedCategory={setSelectedCategory}
-            //   />
-            // }
+            exact
+            element={
+              <Login/>
+            }
           />
           <Route
             path="/category/:selectedCategory"
