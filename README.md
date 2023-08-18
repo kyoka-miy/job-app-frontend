@@ -13,3 +13,4 @@ You need to run the backend API first
 
 ## Tech Stack
 TypeScript, React
+Material UI
