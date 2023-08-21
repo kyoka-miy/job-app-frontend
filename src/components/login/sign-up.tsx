@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Stack, Button, TextField, Box, Typography } from "@mui/material";
-import axios from 'axios';
+import axios from "axios";
 import { CONSTANTS } from "../../constants";
 
 interface FormData {
@@ -70,7 +70,7 @@ const SignUp = () => {
   const onSubmit = async (formData: FormData) => {
     try {
       await axios.post(CONSTANTS.ENDPOINT.REGISTER, formData);
-    } catch(error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -123,7 +123,16 @@ const SignUp = () => {
                   error={!!validationErrors.password}
                   helperText={validationErrors.password}
                 />
-                <Button variant="contained" type="submit">
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled={
+                    formData.firstName.length == 0 ||
+                    formData.lastName.length == 0 ||
+                    formData.mailAddress.length == 0 ||
+                    formData.password.length == 0
+                  }
+                >
                   Sign Up
                 </Button>
               </Stack>
