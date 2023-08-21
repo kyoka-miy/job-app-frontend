@@ -46,7 +46,7 @@ const SignUp = () => {
     }
     if (
       !formData.mailAddress.match(
-        /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+        /^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
       )
     ) {
       newErrors.mailAddress = "Invalid Email Address";
@@ -127,10 +127,10 @@ const SignUp = () => {
                   variant="contained"
                   type="submit"
                   disabled={
-                    formData.firstName.length == 0 ||
-                    formData.lastName.length == 0 ||
-                    formData.mailAddress.length == 0 ||
-                    formData.password.length == 0
+                    formData.firstName.length === 0 ||
+                    formData.lastName.length === 0 ||
+                    formData.mailAddress.length === 0 ||
+                    formData.password.length === 0
                   }
                 >
                   Sign Up
