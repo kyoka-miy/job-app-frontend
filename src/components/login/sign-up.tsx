@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Stack, Button, TextField, Box, Typography } from "@mui/material";
+import axios from 'axios';
+import { CONSTANTS } from "../../constants";
 
 interface FormData {
   firstName: string;
@@ -65,7 +67,13 @@ const SignUp = () => {
     }
   };
 
-  const onSubmit = (formData: FormData) => {};
+  const onSubmit = async (formData: FormData) => {
+    try {
+      await axios.post(CONSTANTS.ENDPOINT.REGISTER, formData);
+    } catch(error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
