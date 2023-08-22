@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Stack, Button, TextField, Box, Typography } from "@mui/material";
 import axios from "axios";
 import { CONSTANTS } from "../../constants";
-import { AnyCnameRecord, AnyRecord } from "dns";
 
 interface FormData {
   firstName: string;
@@ -78,7 +77,7 @@ const SignUp = () => {
       );
       setSubmitError("");
     } catch (error) {
-      setSubmitError(error);
+      setSubmitError("There is an incorrect input.");
       setSuccessMessage("");
     }
   };
