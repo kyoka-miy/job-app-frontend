@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Stack, Button, TextField, Box, Typography } from "@mui/material";
 import axios from "axios";
 import { CONSTANTS } from "../../constants";
+import { AnyCnameRecord, AnyRecord } from "dns";
 
 interface FormData {
   firstName: string;
@@ -20,6 +21,8 @@ const SignUp = () => {
     mailAddress: "",
     password: "",
   });
+  const [submitError, setSubmitError] = useState<any>("");
+  const [successMessage, setSuccessMessage] = useState<any>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,76 +73,94 @@ const SignUp = () => {
   const onSubmit = async (formData: FormData) => {
     try {
       await axios.post(CONSTANTS.ENDPOINT.REGISTER, formData);
+      setSuccessMessage(
+        "We sent a confirmation link to your mail address. Please confirm by clicking the link."
+      );
+      setSubmitError("");
     } catch (error) {
-      console.error(error);
+      setSubmitError(error);
+      setSuccessMessage("");
     }
   };
 
   return (
     <>
-      <Box>
-        <Box sx={{ width: 400 }} margin="auto" mt={15} textAlign="center">
-          <Stack spacing={10}>
-            <Typography variant="h5" gutterBottom>
-              Please Sign Up
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              <Stack spacing={2}>
-                <TextField
-                  required
-                  label="First Name"
-                  placeholder="Charlie"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  error={!!validationErrors.firstName}
-                  helperText={validationErrors.firstName}
-                />
-                <TextField
-                  required
-                  label="Last Name"
-                  placeholder="Puth"
-                  name="lastName"
-                  onChange={handleChange}
-                  error={!!validationErrors.lastName}
-                  helperText={validationErrors.lastName}
-                />
-                <TextField
-                  required
-                  label="Mail Address"
-                  placeholder="sample@mail.com"
-                  name="mailAddress"
-                  onChange={handleChange}
-                  error={!!validationErrors.mailAddress}
-                  helperText={validationErrors.mailAddress}
-                />
-                <TextField
-                  required
-                  label="Password"
-                  placeholder="password"
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  error={!!validationErrors.password}
-                  helperText={validationErrors.password}
-                />
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={
-                    formData.firstName.length === 0 ||
-                    formData.lastName.length === 0 ||
-                    formData.mailAddress.length === 0 ||
-                    formData.password.length === 0
-                  }
-                >
-                  Sign Up
-                </Button>
-              </Stack>
-            </form>
-          </Stack>
+      {successMessage ? (
+        <Box margin="auto" mt={15} textAlign="center">
+          <Typography variant="h6" gutterBottom>
+            {successMessage}
+          </Typography>
         </Box>
-      </Box>
+      ) : (
+        <Box>
+          <Box sx={{ width: 400 }} margin="auto" mt={15} textAlign="center">
+            <Stack spacing={10}>
+              <Typography variant="h5" gutterBottom>
+                Please Sign Up
+              </Typography>
+              <form onSubmit={handleSubmit}>
+                <Stack spacing={2}>
+                  {submitError != null && (
+                    <Typography variant="h6" color="red">
+                      {submitError}
+                    </Typography>
+                  )}
+                  <TextField
+                    required
+                    label="First Name"
+                    placeholder="Charlie"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    error={!!validationErrors.firstName}
+                    helperText={validationErrors.firstName}
+                  />
+                  <TextField
+                    required
+                    label="Last Name"
+                    placeholder="Puth"
+                    name="lastName"
+                    onChange={handleChange}
+                    error={!!validationErrors.lastName}
+                    helperText={validationErrors.lastName}
+                  />
+                  <TextField
+                    required
+                    label="Mail Address"
+                    placeholder="sample@mail.com"
+                    name="mailAddress"
+                    onChange={handleChange}
+                    error={!!validationErrors.mailAddress}
+                    helperText={validationErrors.mailAddress}
+                  />
+                  <TextField
+                    required
+                    label="Password"
+                    placeholder="password"
+                    type="password"
+                    name="password"
+                    onChange={handleChange}
+                    error={!!validationErrors.password}
+                    helperText={validationErrors.password}
+                  />
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={
+                      formData.firstName.length === 0 ||
+                      formData.lastName.length === 0 ||
+                      formData.mailAddress.length === 0 ||
+                      formData.password.length === 0
+                    }
+                  >
+                    Sign Up
+                  </Button>
+                </Stack>
+              </form>
+            </Stack>
+          </Box>
+        </Box>
+      )}
     </>
   );
 };
