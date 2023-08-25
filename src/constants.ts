@@ -4,7 +4,8 @@ export const CONSTANTS = {
   ENDPOINT: {
     REGISTER: `${endpointBase}/register`,
     CONFIRM: `${endpointBase}/confirm`,
-    AUTHENTICATE: `${endpointBase}/authenticate`,
+    AUTHENTICATE: (mailAddress: string, password: string) =>
+      `${endpointBase}/authenticate?mailAddress=${mailAddress}&password=${password}`,
     APPLICATION_ADD: (userId: number) =>
       `${endpointBase}/application/add/${userId}`,
     APPLICATION_GET: (userId: number) =>
