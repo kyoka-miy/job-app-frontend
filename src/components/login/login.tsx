@@ -2,6 +2,7 @@ import { Stack, Link, Button, TextField, Box, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { CONSTANTS } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   setUserId: (userId: number) => void;
@@ -13,12 +14,24 @@ interface FormData {
 }
 
 const Login: React.FC<Props> = ({ setUserId }) => {
+  const navigation = useNavigate();
   const [validationErrors, setValidationErrors] = useState<Partial<FormData>>(
     {}
   );
   const [mailAddress, setMailAddress] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [submitError, setSubmitError] = useState<any>("");
+
+  const handleMailAddressChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = event.target.value;
+    setMailAddress(value);
+  };
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setPassword(value);
+  };
 
   const validateForm = () => {
     const newErrors: Partial<FormData> = {};
@@ -53,6 +66,7 @@ const Login: React.FC<Props> = ({ setUserId }) => {
       );
       setUserId(res.data);
       setSubmitError("");
+      navigation("/home");
     } catch (error) {
       console.error(error);
       setSubmitError("There is an incorrect input.");
@@ -75,18 +89,21 @@ const Login: React.FC<Props> = ({ setUserId }) => {
                   </Typography>
                 )}
                 <TextField
+                  required
                   label="Mail Address"
                   placeholder="Enter your mail address"
                   value={mailAddress}
-                  onChange={() => setMailAddress(mailAddress)}
+                  onChange={handleMailAddressChange}
                   error={!!validationErrors.mailAddress}
                   helperText={validationErrors.mailAddress}
                 />
                 <TextField
+                  required
+                  type="password"
                   label="Password"
                   placeholder="Enter your password"
                   value={password}
-                  onChange={() => setPassword(password)}
+                  onChange={handlePasswordChange}
                   error={!!validationErrors.password}
                   helperText={validationErrors.password}
                 />
