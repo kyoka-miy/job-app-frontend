@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 interface Props {
   setUserId: (userId: number) => void;
+  userId: number | null;
 }
 
 interface FormData {
@@ -13,7 +14,7 @@ interface FormData {
   password: string;
 }
 
-const Login: React.FC<Props> = ({ setUserId }) => {
+const Login: React.FC<Props> = ({ setUserId, userId }) => {
   const navigation = useNavigate();
   const [validationErrors, setValidationErrors] = useState<Partial<FormData>>(
     {}
@@ -66,7 +67,7 @@ const Login: React.FC<Props> = ({ setUserId }) => {
       );
       setUserId(res.data);
       setSubmitError("");
-      navigation("/home");
+      navigation(`/home/${userId}`);
     } catch (error) {
       console.error(error);
       setSubmitError("There is an incorrect input.");
