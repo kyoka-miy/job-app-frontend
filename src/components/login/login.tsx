@@ -110,6 +110,7 @@ const Login: React.FC<Props> = ({ setUserId, userId }) => {
                 />
                 <Button
                   variant="contained"
+                  type="submit"
                   disabled={mailAddress.length === 0 || password.length === 0}
                 >
                   Login
