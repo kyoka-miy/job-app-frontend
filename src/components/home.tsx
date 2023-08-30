@@ -9,7 +9,14 @@ import {
   TableBody,
   Paper,
   Typography,
+  styled,
+  tableCellClasses,
+  Stack,
+  Button,
+  InputBase,
+  IconButton,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { CONSTANTS } from "../constants";
 import axios from "axios";
 
@@ -33,6 +40,26 @@ interface Application {
   status: string;
   user: User;
 }
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 const Home = () => {
   const { userId } = useParams();
@@ -65,30 +92,50 @@ const Home = () => {
       {loading || !data ? (
         <Typography>Loading...</Typography>
       ) : (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Status</TableCell>
-                <TableCell>Applied Date</TableCell>
-                <TableCell>Company</TableCell>
-                <TableCell>Role Title</TableCell>
-                <TableCell>Location</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((app) => (
-                <TableRow key={app.applicationId}>
-                  <TableCell>{app.status}</TableCell>
-                  <TableCell>{app.date}</TableCell>
-                  <TableCell>{app.companyName}</TableCell>
-                  <TableCell>{app.jobTitle}</TableCell>
-                  <TableCell>{app.country}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Stack spacing={8}>
+          <Typography>Your Application</Typography>
+          <Stack direction="row" spacing={2}>
+            <Paper
+              component="form"
+              sx={{
+                p: "2px 4px",
+                display: "flex",
+                alignItems: "center",
+                width: 400,
+              }}
+            >
+              <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
+              <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+            <Button>New+</Button>
+          </Stack>
+          <TableContainer component={Paper} sx={{ width: 1300 }}>
+            <Table>
+              <TableHead>
+                <StyledTableRow>
+                  <StyledTableCell>Status</StyledTableCell>
+                  <StyledTableCell>Applied Date</StyledTableCell>
+                  <StyledTableCell>Company</StyledTableCell>
+                  <StyledTableCell>Role Title</StyledTableCell>
+                  <StyledTableCell>Location</StyledTableCell>
+                </StyledTableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((app) => (
+                  <StyledTableRow key={app.applicationId}>
+                    <StyledTableCell>{app.status}</StyledTableCell>
+                    <StyledTableCell>{app.date}</StyledTableCell>
+                    <StyledTableCell>{app.companyName}</StyledTableCell>
+                    <StyledTableCell>{app.jobTitle}</StyledTableCell>
+                    <StyledTableCell>{app.country}</StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Stack>
       )}
     </>
   );
