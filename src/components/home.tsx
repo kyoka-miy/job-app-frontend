@@ -65,9 +65,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const Home = () => {
   const { userId } = useParams();
-
   const [data, setData] = useState<Application[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [searchText, setSearchText] = useState<string>("");
   console.log(data);
 
   // Prevent unnecessary re-render
@@ -89,6 +89,21 @@ const Home = () => {
       fetchData();
     }
   }, [userId, fetchData]);
+
+  const onSearch = useCallback(
+    async (e: any) => {
+      e.preventDefault();
+      try {
+        const response = await axios.get(
+          CONSTANTS.ENDPOINT.APPLICATION_GET_BY_TEXT(Number(userId), searchText)
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [userId, searchText]
+  );
 
   return (
     <>
@@ -117,8 +132,14 @@ const Home = () => {
                     alignItems: "center",
                     width: 400,
                   }}
+                  onSubmit={onSearch}
                 >
-                  <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
+                  <InputBase
+                    sx={{ ml: 1, flex: 1 }}
+                    placeholder="Search"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
                   <IconButton
                     type="button"
                     sx={{ p: "10px" }}
