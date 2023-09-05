@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   TableContainer,
@@ -15,8 +15,10 @@ import {
   Button,
   InputBase,
   IconButton,
+  Box,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
 import { CONSTANTS } from "../constants";
 import axios from "axios";
 
@@ -68,7 +70,8 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   console.log(data);
 
-  const fetchData = async () => {
+  // Prevent unnecessary re-render
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(
         CONSTANTS.ENDPOINT.APPLICATION_GET(Number(userId))
@@ -79,64 +82,84 @@ const Home = () => {
       console.error(error);
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     if (userId) {
       fetchData();
     }
-  }, [userId]);
+  }, [userId, fetchData]);
 
   return (
     <>
-      {loading || !data ? (
-        <Typography>Loading...</Typography>
-      ) : (
-        <Stack spacing={8}>
-          <Typography>Your Application</Typography>
-          <Stack direction="row" spacing={2}>
-            <Paper
-              component="form"
-              sx={{
-                p: "2px 4px",
-                display: "flex",
-                alignItems: "center",
-                width: 400,
-              }}
-            >
-              <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
-              <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </Paper>
-            <Button>New+</Button>
+      <Box margin="auto" textAlign="center" padding={8}>
+        {loading || !data ? (
+          <Typography variant="h5" gutterBottom>
+            Loading...
+          </Typography>
+        ) : (
+          <Stack spacing={8}>
+            <Typography variant="h5" gutterBottom>
+              Your Application
+            </Typography>
+            <Stack spacing={2}>
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                justifyContent="flex-end"
+              >
+                <Paper
+                  component="form"
+                  sx={{
+                    p: "2px 4px",
+                    display: "flex",
+                    alignItems: "center",
+                    width: 400,
+                  }}
+                >
+                  <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
+                  <IconButton
+                    type="button"
+                    sx={{ p: "10px" }}
+                    aria-label="search"
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                </Paper>
+                <Button>
+                  New
+                  <AddIcon />
+                </Button>
+              </Stack>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <StyledTableRow>
+                      <StyledTableCell>Status</StyledTableCell>
+                      <StyledTableCell>Applied Date</StyledTableCell>
+                      <StyledTableCell>Company</StyledTableCell>
+                      <StyledTableCell>Role Title</StyledTableCell>
+                      <StyledTableCell>Location</StyledTableCell>
+                    </StyledTableRow>
+                  </TableHead>
+                  <TableBody>
+                    {data.map((app) => (
+                      <StyledTableRow key={app.applicationId}>
+                        <StyledTableCell>{app.status}</StyledTableCell>
+                        <StyledTableCell>{app.date}</StyledTableCell>
+                        <StyledTableCell>{app.companyName}</StyledTableCell>
+                        <StyledTableCell>{app.jobTitle}</StyledTableCell>
+                        <StyledTableCell>{app.country}</StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Stack>
           </Stack>
-          <TableContainer component={Paper} sx={{ width: 1300 }}>
-            <Table>
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell>Status</StyledTableCell>
-                  <StyledTableCell>Applied Date</StyledTableCell>
-                  <StyledTableCell>Company</StyledTableCell>
-                  <StyledTableCell>Role Title</StyledTableCell>
-                  <StyledTableCell>Location</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
-              <TableBody>
-                {data.map((app) => (
-                  <StyledTableRow key={app.applicationId}>
-                    <StyledTableCell>{app.status}</StyledTableCell>
-                    <StyledTableCell>{app.date}</StyledTableCell>
-                    <StyledTableCell>{app.companyName}</StyledTableCell>
-                    <StyledTableCell>{app.jobTitle}</StyledTableCell>
-                    <StyledTableCell>{app.country}</StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Stack>
-      )}
+        )}
+      </Box>
     </>
   );
 };
