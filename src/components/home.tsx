@@ -17,6 +17,7 @@ import {
   IconButton,
   Box,
   Modal,
+  TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
@@ -44,6 +45,15 @@ interface Application {
   user: User;
 }
 
+interface FormData {
+  companyName: string;
+  jobTitle: string;
+  date: Date;
+  location: string;
+  status: string;
+  note: string;
+}
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -69,7 +79,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 800,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -81,7 +91,14 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchText, setSearchText] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  console.log(data);
+  const [formData, setFormData] = useState<FormData>({
+    companyName: "",
+    jobTitle: "",
+    date: new Date(Date.now()),
+    location: "",
+    status: "RESUME_SUBMITTED",
+    note: "",
+  });
 
   // Prevent unnecessary re-render
   const fetchData = useCallback(async () => {
@@ -118,17 +135,55 @@ const Home = () => {
     [userId, searchText]
   );
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   // if (validateForm()) {
+  //   //   onSubmit(formData);
+  //   // }
+  // };
+
+  // const onSubmit = async (formData: FormData) => {
+  //   try {
+  //     await axios.post(CONSTANTS.ENDPOINT.REGISTER, formData);
+  //     setSuccessMessage(
+  //       "We sent a confirmation link to your mail address. Please confirm by clicking the link."
+  //     );
+  //     setSubmitError("");
+  //   } catch (error) {
+  //     setSubmitError("There is an incorrect input.");
+  //     setSuccessMessage("");
+  //   }
+  // };
+
   return (
     <>
       <Box margin="auto" textAlign="center" padding={8}>
         <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <Box sx={style}>
             <Typography variant="h6" component="h2">
-              Text in a modal
+              Add a new application
             </Typography>
-            <Typography sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            <form>
+              <Stack>
+                <TextField
+                  required
+                  label="Company Name"
+                  placeholder="Company Name"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                />
+              </Stack>
+            </form>
           </Box>
         </Modal>
         {loading || !data ? (
