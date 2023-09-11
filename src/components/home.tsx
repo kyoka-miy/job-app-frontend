@@ -16,6 +16,7 @@ import {
   InputBase,
   IconButton,
   Box,
+  Modal,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
@@ -63,11 +64,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};
+
 const Home = () => {
   const { userId } = useParams();
   const [data, setData] = useState<Application[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchText, setSearchText] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   console.log(data);
 
   // Prevent unnecessary re-render
@@ -108,6 +121,16 @@ const Home = () => {
   return (
     <>
       <Box margin="auto" textAlign="center" padding={8}>
+        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <Box sx={style}>
+            <Typography variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+          </Box>
+        </Modal>
         {loading || !data ? (
           <Typography variant="h5" gutterBottom>
             Loading...
@@ -148,7 +171,7 @@ const Home = () => {
                     <SearchIcon />
                   </IconButton>
                 </Paper>
-                <Button>
+                <Button onClick={() => setIsModalOpen(true)}>
                   New
                   <AddIcon />
                 </Button>
