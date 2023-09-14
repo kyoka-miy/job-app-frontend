@@ -5,6 +5,8 @@ import {
   Typography,
   TextField,
   Button,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useState } from "react";
 import { CONSTANTS } from "../constants";
@@ -36,11 +38,7 @@ export interface FormData {
   note: string;
 }
 
-const AddModal: React.FC<Props> = ({
-  isModalOpen,
-  setIsModalOpen,
-  userId
-}) => {
+const AddModal: React.FC<Props> = ({ isModalOpen, setIsModalOpen, userId }) => {
   const [formData, setFormData] = useState<FormData>({
     companyName: "",
     jobTitle: "",
@@ -49,7 +47,7 @@ const AddModal: React.FC<Props> = ({
     status: "RESUME_SUBMITTED",
     note: "",
   });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -63,7 +61,10 @@ const AddModal: React.FC<Props> = ({
   };
   const onSubmit = async (formData: FormData) => {
     try {
-      await axios.post(CONSTANTS.ENDPOINT.APPLICATION_ADD(Number(userId)), formData);
+      await axios.post(
+        CONSTANTS.ENDPOINT.APPLICATION_ADD(Number(userId)),
+        formData
+      );
       setIsModalOpen(false);
       // setSuccessMessage(
       //   "We sent a confirmation link to your mail address. Please confirm by clicking the link."
@@ -107,14 +108,20 @@ const AddModal: React.FC<Props> = ({
                 value={formData.date}
                 onChange={handleChange}
               />
-              <TextField
+              <Select
                 required
-                label="Application Status"
-                placeholder="Select Application Status"
                 name="status"
+                placeholder="Application Status"
                 value={formData.status}
                 onChange={handleChange}
-              />
+                autoWidth
+              >
+                <MenuItem value="RESUME_SUBMITTED">Resume Submitted</MenuItem>
+                <MenuItem value="FIRST_INTERVIEW">First Interview</MenuItem>
+                <MenuItem value="SECOND_INTERVIEW">Second Interview</MenuItem>
+                <MenuItem value="REJECTED">Rejected</MenuItem>
+                <MenuItem value="ACCEPTED">Accepted</MenuItem>
+              </Select>
               <TextField
                 required
                 label="Location"
