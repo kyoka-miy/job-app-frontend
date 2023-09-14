@@ -168,7 +168,7 @@ const Home = () => {
           <Box sx={style}>
             <Stack spacing={3}>
               <Typography variant="h6" component="h2">
-                Add a new application
+                Add a New Application
               </Typography>
               <form onSubmit={handleSubmit}>
                 <Stack spacing={2}>
