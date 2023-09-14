@@ -143,47 +143,96 @@ const Home = () => {
     }));
   };
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
 
-  //   // if (validateForm()) {
-  //   //   onSubmit(formData);
-  //   // }
-  // };
-
-  // const onSubmit = async (formData: FormData) => {
-  //   try {
-  //     await axios.post(CONSTANTS.ENDPOINT.REGISTER, formData);
-  //     setSuccessMessage(
-  //       "We sent a confirmation link to your mail address. Please confirm by clicking the link."
-  //     );
-  //     setSubmitError("");
-  //   } catch (error) {
-  //     setSubmitError("There is an incorrect input.");
-  //     setSuccessMessage("");
-  //   }
-  // };
+  const onSubmit = async (formData: FormData) => {
+    try {
+      await axios.post(CONSTANTS.ENDPOINT.APPLICATION_ADD(Number(userId)), formData);
+      // setSuccessMessage(
+      //   "We sent a confirmation link to your mail address. Please confirm by clicking the link."
+      // );
+      // setSubmitError("");
+    } catch (error) {
+      // setSubmitError("There is an incorrect input.");
+      // setSuccessMessage("");
+    }
+  };
 
   return (
     <>
       <Box margin="auto" textAlign="center" padding={8}>
         <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <Box sx={style}>
-            <Typography variant="h6" component="h2">
-              Add a new application
-            </Typography>
-            <form>
-              <Stack>
-                <TextField
-                  required
-                  label="Company Name"
-                  placeholder="Company Name"
-                  name="companyName"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                />
-              </Stack>
-            </form>
+            <Stack spacing={3}>
+              <Typography variant="h6" component="h2">
+                Add a new application
+              </Typography>
+              <form onSubmit={handleSubmit}>
+                <Stack spacing={2}>
+                  <TextField
+                    required
+                    label="Company Name"
+                    placeholder="Company Name"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    required
+                    label="Job Title"
+                    placeholder="Job Title"
+                    name="jobTitle"
+                    value={formData.jobTitle}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    required
+                    label="Applied Date"
+                    placeholder="Select Applied Date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    required
+                    label="Application Status"
+                    placeholder="Select Application Status"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    required
+                    label="Location"
+                    placeholder="Location"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    label="Note"
+                    placeholder="Note"
+                    name="note"
+                    value={formData.note}
+                    onChange={handleChange}
+                  />
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={
+                      formData.companyName.length === 0 ||
+                      formData.jobTitle.length === 0 ||
+                      formData.status.length === 0
+                    }
+                  >
+                    Add
+                  </Button>
+                </Stack>
+              </form>
+            </Stack>
           </Box>
         </Modal>
         {loading || !data ? (
