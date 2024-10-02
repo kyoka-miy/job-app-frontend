@@ -46,7 +46,7 @@ const StyledButton = styled.button<{
   cursor: pointer;
   border: none;
   width: ${(props) => (props.width ? `${props.width}px` : "auto")};
-  transition: 0.4s ease;
+  transition: 0.2s ease;
 
   ${(props) =>
     props.buttonType === "primary" &&
@@ -55,6 +55,10 @@ const StyledButton = styled.button<{
       color: ${colors.purple6};
       &:hover {
         background-color: ${!props.disabled && colors.purple7};
+      }
+      &:active {
+        background-color: ${!props.disabled &&
+        colors.purple2}; /* Change color on click */
       }
     `}
 

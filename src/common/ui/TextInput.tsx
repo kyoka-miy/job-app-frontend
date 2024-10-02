@@ -8,7 +8,7 @@ type Props = {
   placeholder?: string;
   errorMessage?: string;
   value?: string;
-  onChange?: () => void;
+  onChange?: (v: any) => void;
   disabled?: boolean;
   width?: number;
   type?: string;
@@ -19,6 +19,7 @@ export const TextInput: React.FC<Props> = ({
   errorMessage,
   disabled = false,
   type = "text",
+  onChange,
   ...props
 }) => {
   return (
@@ -28,6 +29,9 @@ export const TextInput: React.FC<Props> = ({
         placeholder={placeholder}
         hasError={!!errorMessage}
         disabled={disabled}
+        onChange={(e) => {
+          onChange?.(e.target.value);
+        }}
         {...props}
       />
       {errorMessage && (
