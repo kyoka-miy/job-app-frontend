@@ -2,14 +2,28 @@ import React, { useState } from "react";
 import { Button, VStack, LargeText, TextInput, SmallText } from "../../common";
 import styled from "styled-components";
 import { usePost } from "../../hooks/usePost";
+import { CONSTANTS } from "../../constants";
 
 export const SignUp: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { doPost, loading } = usePost("https://hidden-river-05148-37f9b630249f.herokuapp.com/auth/register");
+  const { doPost, isLoading } = usePost({
+    url: CONSTANTS.ENDPOINT.AUTH_REGISTER,
+    onSuccess: (data) => {
+      sessionStorage.setItem("token", data.token);
+      console.log(data);
+    },
+    onError: (err) => {
+      alert(err);
+    },
+  });
   const onClick = () => {
-    doPost({ name: name, email: email, password: password });
+    doPost({
+      name: name,
+      email: email,
+      password: password,
+    });
   };
   return (
     <SignUpWrapper>
@@ -32,12 +46,20 @@ export const SignUp: React.FC = () => {
                   onChange={setPassword}
                 />
               </VStack>
-              <Button width={220} onClick={onClick} loading={loading}>Sign Up</Button>
+              <Button
+                width={220}
+                onClick={onClick}
+                loading={isLoading}
+                disabled
+              >
+                Sign Up
+              </Button>
             </VStack>
           </FormWrapper>
         </VStack>
         <SmallText>
-          Already have an account? <a href="/login">Please login from here</a>
+          Already have an account?{" "}
+          <a href={CONSTANTS.LINK.LOGIN}>Please login from here</a>
         </SmallText>
       </VStack>
     </SignUpWrapper>
