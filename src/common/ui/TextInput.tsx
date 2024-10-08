@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { VStack } from "./Stack";
 import { SmallText } from "./Text";
@@ -7,21 +7,35 @@ import { colors } from "../styles";
 type Props = {
   placeholder?: string;
   errorMessage?: string;
-  value?: string;
+  value: string;
   onChange?: (v: any) => void;
   disabled?: boolean;
   width?: number;
   type?: string;
+  validate?: (v: any) => boolean;
 };
 
 export const TextInput: React.FC<Props> = ({
   placeholder = "",
-  errorMessage,
   disabled = false,
   type = "text",
   onChange,
+  validate = () => true,
+  value,
+  errorMessage = "",
   ...props
 }) => {
+  const [isTouched, setIsTouched] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  useEffect(() => {
+    if (value.length !== 0) {
+      setIsTouched(true);
+    }
+    if (isTouched) {
+      setIsValid(validate(value));
+    }
+  }, [value, isTouched, validate]);
+
   return (
     <VStack gap={8}>
       <StyledInput
@@ -32,6 +46,8 @@ export const TextInput: React.FC<Props> = ({
         onChange={(e) => {
           onChange?.(e.target.value);
         }}
+        value={value}
+        isValid={isValid}
         {...props}
       />
       {errorMessage && (
@@ -43,12 +59,17 @@ export const TextInput: React.FC<Props> = ({
   );
 };
 
-const StyledInput = styled.input<{ hasError: boolean; width?: number }>`
+const StyledInput = styled.input<{
+  hasError: boolean;
+  width?: number;
+  isValid: boolean;
+}>`
   width: ${(p) => (p.width ? `${p.width}px` : "100%")};
   padding: 8px 8px;
   border: none;
   border-bottom: 2px solid
-    ${(props) => (props.hasError ? colors.purple3 : colors.foggyGray)};
+    ${(props) =>
+      props.hasError || !props.isValid ? colors.purple3 : colors.foggyGray};
   background-color: ${(props) =>
     props.disabled ? colors.softSilver : "transparent"};
   outline: none;
@@ -60,13 +81,13 @@ const StyledInput = styled.input<{ hasError: boolean; width?: number }>`
 
   &:focus {
     border-bottom-color: ${(props) =>
-      props.hasError ? colors.purple3 : colors.purple2};
+      props.hasError || !props.isValid ? colors.purple3 : colors.purple2};
     background-color: ${colors.softSilver};
   }
 
   &:hover {
     border-bottom-color: ${(props) =>
-      props.hasError ? colors.purple3 : colors.purple2};
+      props.hasError || !props.isValid ? colors.purple3 : colors.purple2};
     background-color: ${colors.softSilver};
   }
 
