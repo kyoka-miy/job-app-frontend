@@ -8,13 +8,20 @@ type Props = {
 
 export const usePost = ({ url, onSuccess, onError }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const token = sessionStorage.getItem("token");
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+  if (token && !url.includes("auth")) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
   const doPost = useCallback(
     async (body: any) => {
       try {
         setIsLoading(true);
         const response = await fetch(url, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify(body),
         });
         const result = await response.json();

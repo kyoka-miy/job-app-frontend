@@ -5,6 +5,7 @@ import { ValidationUtil } from "../../common/utils/validation";
 import { usePost } from "../../common/hooks/usePost";
 import { CONSTANTS } from "../../constants";
 import { colors } from "../../common/styles";
+import { useFetch } from "../../common/hooks/useFetch";
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -23,9 +24,13 @@ export const Login: React.FC = () => {
 
     setIsAllValid(isValid);
   }, [email, password]);
-  // TODO: GET
-  const { doPost, isLoading } = usePost({
+
+  const { doFetch, isLoading } = useFetch({
     url: CONSTANTS.ENDPOINT.AUTH_LOGIN,
+    params: {
+      email: email,
+      password: password,
+    },
     onSuccess: (data) => {
       sessionStorage.setItem("token", data.token);
       setErrorMessage("");
@@ -34,12 +39,6 @@ export const Login: React.FC = () => {
       setErrorMessage(err);
     },
   });
-  const onClick = () => {
-    doPost({
-      email: email,
-      password: password,
-    });
-  };
 
   return (
     <SignUpWrapper>
@@ -88,7 +87,7 @@ export const Login: React.FC = () => {
             </VStack>
             <Button
               width={220}
-              onClick={onClick}
+              onClick={() => doFetch()}
               loading={isLoading}
               disabled={!isAllValid}
             >
