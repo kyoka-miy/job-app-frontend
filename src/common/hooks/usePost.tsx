@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 type Props = {
   url: string;
@@ -9,9 +9,9 @@ type Props = {
 export const usePost = ({ url, onSuccess, onError }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const token = sessionStorage.getItem("token");
-  const headers: HeadersInit = {
+  const headers: HeadersInit = useMemo(() => ({
     "Content-Type": "application/json",
-  };
+  }), []);
   if (token && !url.includes("auth")) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -39,7 +39,7 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
         setIsLoading(false);
       }
     },
-    [url, onSuccess, onError]
+    [url, onSuccess, onError, headers]
   );
   return { doPost, isLoading };
 };

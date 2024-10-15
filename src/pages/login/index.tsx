@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Button, VStack, LargeText, TextInput, SmallText } from "../../common";
 import styled from "styled-components";
 import { ValidationUtil } from "../../common/utils/validation";
-import { usePost } from "../../common/hooks/usePost";
 import { CONSTANTS } from "../../constants";
 import { colors } from "../../common/styles";
 import { useFetch } from "../../common/hooks/useFetch";
+import { useNavigate } from "react-router-dom";
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +13,7 @@ export const Login: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isAllValid, setIsAllValid] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (password.length > 0) setIsTouched(true);
@@ -34,6 +35,7 @@ export const Login: React.FC = () => {
     onSuccess: (data) => {
       sessionStorage.setItem("token", data.token);
       setErrorMessage("");
+      navigate(CONSTANTS.LINK.BOARDS);
     },
     onError: (err) => {
       setErrorMessage(err);

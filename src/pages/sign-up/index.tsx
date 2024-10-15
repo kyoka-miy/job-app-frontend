@@ -78,7 +78,7 @@ export const SignUp: React.FC = () => {
                       ValidationUtil.require(v) &&
                       ValidationUtil.max(v, 20) &&
                       ValidationUtil.min(v, 6) &&
-                      errorMessage.length == 0
+                      errorMessage.length === 0
                     }
                     errorMessage={
                       isTouched &&

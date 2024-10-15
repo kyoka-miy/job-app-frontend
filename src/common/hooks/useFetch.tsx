@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 interface Params {
   [key: string]: any;
@@ -15,12 +15,19 @@ export const useFetch = ({ url, onSuccess, onError, params }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState();
   const token = sessionStorage.getItem("token");
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-  };
-  if (token && !url.includes("auth")) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
+  const headers: HeadersInit = useMemo(() => {
+    const baseHeaders = {
+      "Content-Type": "application/json",
+    };
+    if (token && !url.includes("auth")) {
+      return {
+        ...baseHeaders,
+        "Authorization": `Bearer ${token}`,
+      };
+    }
+    return baseHeaders;
+  }, [token, url]);
+  
   const query = useMemo(
     () => (params ? `?${new URLSearchParams(params).toString()}` : ''),
     [params]
@@ -46,7 +53,7 @@ export const useFetch = ({ url, onSuccess, onError, params }: Props) => {
     } finally {
       setIsLoading(false);
     }
-  }, [url, onSuccess, onError]);
+  }, [url, onSuccess, onError, headers, query]);
 
   return { data, doFetch, isLoading };
 };
