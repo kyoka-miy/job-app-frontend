@@ -26,7 +26,7 @@ export const Login: React.FC = () => {
     setIsAllValid(isValid);
   }, [email, password]);
 
-  const { doFetch, isLoading } = useFetch({
+  const { refetch, isLoading } = useFetch({
     url: CONSTANTS.ENDPOINT.AUTH_LOGIN,
     params: {
       email: email,
@@ -43,7 +43,7 @@ export const Login: React.FC = () => {
   });
 
   return (
-    <SignUpWrapper>
+    <LoginWrapper>
       <VStack gap={80} align="left">
         <LargeText bold>Log In</LargeText>
         <FormWrapper>
@@ -89,7 +89,7 @@ export const Login: React.FC = () => {
             </VStack>
             <Button
               width={220}
-              onClick={() => doFetch()}
+              onClick={() => refetch()}
               loading={isLoading}
               disabled={!isAllValid}
             >
@@ -98,11 +98,11 @@ export const Login: React.FC = () => {
           </VStack>
         </FormWrapper>
       </VStack>
-    </SignUpWrapper>
+    </LoginWrapper>
   );
 };
 
-const SignUpWrapper = styled.div`
+const LoginWrapper = styled.div`
   width: 35%;
   margin: auto;
   margin-top: 130px;
