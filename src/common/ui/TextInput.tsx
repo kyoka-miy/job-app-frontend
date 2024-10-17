@@ -65,9 +65,9 @@ const StyledInput = styled.input<{
   isValid: boolean;
 }>`
   width: ${(p) => (p.width ? `${p.width}px` : "100%")};
-  padding: 8px 8px;
+  padding: 12px 12px;
   border: none;
-  border-bottom: 2px solid
+  border: 1px solid
     ${(props) =>
       props.hasError || !props.isValid ? colors.purple3 : colors.foggyGray};
   background-color: ${(props) =>
@@ -75,20 +75,17 @@ const StyledInput = styled.input<{
   outline: none;
   font-size: 16px;
   color: ${(props) => (props.hasError ? colors.purple3 : colors.deepSlate)};
-  transition: 0.3s ease;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  transition: 0.2s ease;
+  border-radius: 8px;
 
   &:focus {
-    border-bottom-color: ${(props) =>
+    border-color: ${(props) =>
       props.hasError || !props.isValid ? colors.purple3 : colors.purple2};
-    background-color: ${colors.softSilver};
   }
 
   &:hover {
-    border-bottom-color: ${(props) =>
+    border-color: ${(props) =>
       props.hasError || !props.isValid ? colors.purple3 : colors.purple2};
-    background-color: ${colors.softSilver};
   }
 
   ${(props) =>

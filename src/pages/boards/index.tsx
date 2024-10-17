@@ -1,78 +1,169 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useFetch } from "../../common/hooks/useFetch";
 import { CONSTANTS } from "../../constants";
 import { BoardDto } from "../../api-interface/board";
 import { useNavigate } from "react-router-dom";
-import { Button, LargeText, SmallText, VStack } from "../../common";
+import {
+  Button,
+  LargeText,
+  MediumText,
+  SmallText,
+  TextInput,
+  VStack,
+} from "../../common";
 import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/styles";
+import moment from "moment";
+import { Modal } from "../../common/ui/Modal";
+import { ValidationUtil } from "../../common/utils/validation";
+import { usePost } from "../../common/hooks/usePost";
 
 export const Boards: React.FC = () => {
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+  const { doPost, isLoading: postIsLoading } = usePost({
+    url: CONSTANTS.ENDPOINT.BOARDS,
+    onSuccess: () => {
+      window.location.reload();
+    },
+    onError: (err) => {
+      setErrorMessage(err);
+    },
+  });
   const { data, isLoading } = useFetch<BoardDto[]>({
     url: CONSTANTS.ENDPOINT.BOARDS,
     onSuccess: (data) => {
-      setErrorMessage("");
       if (data.length === 1) {
         sessionStorage.setItem("board", JSON.stringify(data[0]));
         navigate("/");
       }
     },
-    onError: (err) => {
-      setErrorMessage(err);
-    },
     // fetch data only when the user is on this page
     shouldFetch: true,
   });
+  const onSelectBoard = useCallback(
+    (boardId: string) => {
+      sessionStorage.setItem("boardId", boardId);
+      navigate("/");
+    },
+    [navigate]
+  );
+  const onAddBoard = useCallback(
+    (name: string) => {
+      doPost({
+        name: name,
+      });
+    },
+    [doPost]
+  );
 
   return (
     <>
-      {isLoading ? (
-        <SmallText>loading...</SmallText>
-      ) : (
-        <>
-          <LoginWrapper>
-            <VStack gap={80} align="left">
-              <LargeText bold>Select Your Board</LargeText>
-              <FormWrapper>
-                <VStack gap={60} align="center">
-                  <VStack gap={24}>
-                    <VStack gap={40}>
-                      {data?.map((v, index) => (
-                        <SmallText key={index}>{v.name}</SmallText>
-                      ))}
-                    </VStack>
-                    <StyledSmallText
-                      color={colors.purple3}
-                      errorMessage={errorMessage}
-                    >
-                      {errorMessage}
-                    </StyledSmallText>
-                  </VStack>
-                  <Button width={220}>+ Add a new board</Button>
-                </VStack>
-              </FormWrapper>
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <VStack gap={40} align="center">
+            <MediumText>Add a board</MediumText>
+            <VStack>
+              <StyledTextWrapper>
+                <SmallText>Name</SmallText>
+              </StyledTextWrapper>
+              <TextInput
+                value={name}
+                onChange={setName}
+                validate={(v) => ValidationUtil.require(v)}
+              />
             </VStack>
-          </LoginWrapper>
-        </>
+            {errorMessage && (
+              <SmallText color={colors.purple3}>{errorMessage}</SmallText>
+            )}
+            <Button
+              disabled={!ValidationUtil.require(name)}
+              loading={postIsLoading}
+              onClick={() => onAddBoard(name)}
+            >
+              Add
+            </Button>
+          </VStack>
+        </Modal>
+      )}
+      {isLoading ? (
+        <SmallText>...Loading</SmallText>
+      ) : (
+        <BoardWrapper>
+          <VStack gap={50} align="center">
+            <LargeText bold>Select Your Board</LargeText>
+            <VStack gap={40} align="center">
+              <Button width={220} onClick={() => setShowModal(true)}>
+                + Add a new board
+              </Button>
+              <VStack gap={24}>
+                <BoardList>
+                  {data?.map((v, index) => (
+                    <div key={index} style={{ margin: 20 }}>
+                      <Panel
+                        width={280}
+                        height={100}
+                        onClick={() => onSelectBoard(v.boardId)}
+                      >
+                        <VStack align="left" gap={18}>
+                          <MediumText>{v.name}</MediumText>
+                          <SmallText color={colors.mutedGraphite}>
+                            Created {moment(v.createdDatetime).fromNow()}
+                          </SmallText>
+                        </VStack>
+                      </Panel>
+                    </div>
+                  ))}
+                </BoardList>
+              </VStack>
+            </VStack>
+          </VStack>
+        </BoardWrapper>
       )}
     </>
   );
 };
 
-const LoginWrapper = styled.div`
-  width: 35%;
+const BoardWrapper = styled.div`
+  width: auto;
   margin: auto;
-  margin-top: 130px;
+  padding-top: 130px;
+  height: 100vh;
 `;
 
-const FormWrapper = styled.div`
-  padding: 0 8px;
+const BoardList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 960px;
+  margin: auto;
+  overflow-y: auto;
 `;
 
-const StyledSmallText = styled(SmallText)<{ errorMessage: string }>`
-  visibility: ${(p) => (p.errorMessage.length > 0 ? "visible" : "hidden")};
-  display: inline-block;
+const Panel = styled.div<{
+  width: number | string;
+  height: number | string;
+}>`
+  display: flex;
+  justify-content: center;
+  width: ${(p) => (typeof p.width === "number" ? `${p.width}px` : p.width)};
+  height: ${(p) => (typeof p.height === "number" ? `${p.height}px` : p.height)};
+  padding: 20px;
+  border: 1px solid ${colors.foggyGray};
+  border-radius: 8px;
+  &:hover {
+    background-color: ${colors.purple7};
+    border-color: ${colors.purple2};
+    cursor: pointer;
+  }
+  &:active {
+    background-color: ${colors.purple2};
+  }
+`;
+
+const StyledTextWrapper = styled.div`
+  text-align: left;
+  padding: 0 0 8px 8px;
 `;

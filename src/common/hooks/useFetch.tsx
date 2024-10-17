@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CONSTANTS } from "../../constants";
 
 interface Params {
   [key: string]: any;
@@ -19,6 +21,7 @@ export const useFetch = <T,>({
   params,
   shouldFetch = false,
 }: Props) => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<T | null>();
   const token = sessionStorage.getItem("token");
@@ -50,6 +53,8 @@ export const useFetch = <T,>({
       if (response.ok) {
         setData(result as T);
         onSuccess?.(result);
+      } else if (response.status === 401) {
+        navigate(CONSTANTS.LINK.LOGIN);
       } else {
         throw new Error(result.message || "");
       }
@@ -60,7 +65,7 @@ export const useFetch = <T,>({
     } finally {
       setIsLoading(false);
     }
-  }, [url, onSuccess, onError, headers, query]);
+  }, [url, onSuccess, onError, headers, query, navigate]);
 
   useEffect(() => {
     if (shouldFetch) {

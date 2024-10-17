@@ -10,11 +10,11 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <GlobalStyle />
-        <Routes>
-          <Route path={CONSTANTS.LINK.SIGN_UP} element={<SignUp />} />
-          <Route path={CONSTANTS.LINK.LOGIN} element={<Login />} />
-          <Route path={CONSTANTS.LINK.BOARDS} element={<Boards />} />
-        </Routes>
+      <Routes>
+        <Route path={CONSTANTS.LINK.SIGN_UP} element={<SignUp />} />
+        <Route path={CONSTANTS.LINK.LOGIN} element={<Login />} />
+        <Route path={CONSTANTS.LINK.BOARD_SELECT} element={<Boards />} />
+      </Routes>
     </BrowserRouter>
   );
 };

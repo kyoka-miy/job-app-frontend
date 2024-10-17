@@ -24,9 +24,9 @@ export const BoardContextProvider: React.FC<Props> = ({ children }) => {
     const storedBoard = sessionStorage.getItem("board");
     return storedBoard ? JSON.parse(storedBoard) : null;
   });
-  
+
   if (sessionStorage.getItem("token") !== null)
-    navigate(CONSTANTS.LINK.BOARDS);
+    navigate(CONSTANTS.LINK.BOARD_SELECT);
 
   useFetch({
     url: CONSTANTS.ENDPOINT.BOARDS,
@@ -36,7 +36,7 @@ export const BoardContextProvider: React.FC<Props> = ({ children }) => {
         setBoard(selectedBoard);
         sessionStorage.setItem("board", JSON.stringify(selectedBoard));
         navigate("/");
-      } else navigate(CONSTANTS.LINK.BOARDS);
+      } else navigate(CONSTANTS.LINK.BOARD_SELECT);
     },
     onError: () => {
       navigate(CONSTANTS.LINK.SIGN_UP);

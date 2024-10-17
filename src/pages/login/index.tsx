@@ -35,7 +35,7 @@ export const Login: React.FC = () => {
     onSuccess: (data) => {
       sessionStorage.setItem("token", data.token);
       setErrorMessage("");
-      navigate(CONSTANTS.LINK.BOARDS);
+      navigate(CONSTANTS.LINK.BOARD_SELECT);
     },
     onError: (err) => {
       setErrorMessage(err);

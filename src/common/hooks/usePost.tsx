@@ -1,4 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CONSTANTS } from "../../constants";
 
 type Props = {
   url: string;
@@ -7,11 +9,15 @@ type Props = {
 };
 
 export const usePost = ({ url, onSuccess, onError }: Props) => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const token = sessionStorage.getItem("token");
-  const headers: HeadersInit = useMemo(() => ({
-    "Content-Type": "application/json",
-  }), []);
+  const headers: HeadersInit = useMemo(
+    () => ({
+      "Content-Type": "application/json",
+    }),
+    []
+  );
   if (token && !url.includes("auth")) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -24,9 +30,18 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
           headers,
           body: JSON.stringify(body),
         });
-        const result = await response.json();
+
+        let result;
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          result = await response.json();
+        } else {
+          result = {};
+        }
         if (response.ok) {
           onSuccess?.(result);
+        } else if (response.status === 401) {
+          navigate(CONSTANTS.LINK.LOGIN);
         } else {
           throw new Error(result.message || "");
         }
@@ -39,7 +54,7 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
         setIsLoading(false);
       }
     },
-    [url, onSuccess, onError, headers]
+    [url, onSuccess, onError, headers, navigate]
   );
   return { doPost, isLoading };
 };
