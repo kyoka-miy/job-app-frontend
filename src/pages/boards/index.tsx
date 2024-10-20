@@ -46,8 +46,8 @@ export const Boards: React.FC = () => {
     shouldFetch: true,
   });
   const onSelectBoard = useCallback(
-    (boardId: string) => {
-      sessionStorage.setItem("boardId", boardId);
+    (board: BoardDto) => {
+      localStorage.setItem("board", JSON.stringify(board));
       navigate("/");
     },
     [navigate]
@@ -107,7 +107,7 @@ export const Boards: React.FC = () => {
                       <Panel
                         width={280}
                         height={100}
-                        onClick={() => onSelectBoard(v.boardId)}
+                        onClick={() => onSelectBoard(v)}
                       >
                         <VStack align="left" gap={18}>
                           <MediumText>{v.name}</MediumText>
