@@ -35,7 +35,7 @@ export const BoardContextProvider: React.FC<Props> = ({ children }) => {
         const selectedBoard = data[0];
         setBoard(selectedBoard);
         sessionStorage.setItem("board", JSON.stringify(selectedBoard));
-        navigate("/");
+        navigate("/job");
       } else navigate(CONSTANTS.LINK.BOARD_SELECT);
     },
     onError: () => {

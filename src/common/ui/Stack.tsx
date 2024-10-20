@@ -15,9 +15,12 @@ type BaseProps = Props & {
   direction?: CSSProperties["flexDirection"];
 };
 
-export const VStack: React.FC<Props> = ({ children, ...props }) => {
+export const VStack: React.FC<Props> = ({
+  children,
+  ...props
+}) => {
   return (
-    <StyledStack direction="column" {...props}>
+    <StyledStack direction="column" width="100%" {...props}>
       {children}
     </StyledStack>
   );

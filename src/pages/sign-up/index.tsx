@@ -5,8 +5,10 @@ import { usePost } from "../../common/hooks/usePost";
 import { CONSTANTS } from "../../constants";
 import { ValidationUtil } from "../../common/utils/validation";
 import { colors } from "../../common/styles";
+import { useNavigate } from "react-router-dom";
 
 export const SignUp: React.FC = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +21,7 @@ export const SignUp: React.FC = () => {
     onSuccess: (data) => {
       sessionStorage.setItem("token", data.token);
       setErrorMessage("");
+      navigate("/job");
     },
     onError: (err) => {
       setErrorMessage(err);

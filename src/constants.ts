@@ -3,6 +3,7 @@ export const CONSTANTS = {
   ENDPOINT: {
     AUTH_REGISTER: `${endpointBase}/auth/register`,
     AUTH_LOGIN: `${endpointBase}/auth/login`,
+    LOGOUT: `${endpointBase}/account-logout`,
     BOARDS: `${endpointBase}/boards`,
   },
   LINK: {

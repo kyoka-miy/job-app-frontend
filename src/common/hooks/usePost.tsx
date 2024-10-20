@@ -22,7 +22,7 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
     headers["Authorization"] = `Bearer ${token}`;
   }
   const doPost = useCallback(
-    async (body: any) => {
+    async (body?: any) => {
       try {
         setIsLoading(true);
         const response = await fetch(url, {

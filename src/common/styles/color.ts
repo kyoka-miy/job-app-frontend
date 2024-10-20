@@ -11,7 +11,8 @@ export const colors = {
   mutedGraphite: "#999999",
   coolCharcoal: "#666666",
   deepSlate: "#333333",
-  neutralBlack: '#282828',
-  neutralGray1: '#F8F8F8',
+  neutralBlack: "#282828",
+  neutralGray1: "#F8F8F8",
+  white: "#FFFFFF",
   grayText: "rgba(25, 4, 69, 0.6)",
 };

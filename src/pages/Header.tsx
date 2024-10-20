@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../common/styles";
-import { HoverMenu, HStack, SmallText, VStack } from "../common";
+import { HoverMenu, HStack, SmallText } from "../common";
 import {
   CalendarIcon,
   JobIcon,
@@ -10,17 +10,18 @@ import {
   SettingIcon,
 } from "../common/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useFetch } from "../common/hooks";
+import { useCallback, useMemo, useState } from "react";
+import { useFetch, usePost } from "../common/hooks";
 import { BoardDto } from "../api-interface/board";
 import { CONSTANTS } from "../constants";
 
 const menu = [
-  { text: "Job", icon: JobIcon, path: "/" },
+  { text: "Job", icon: JobIcon, path: "/job" },
   { text: "Calendar", icon: CalendarIcon, path: "/calender" },
   { text: "Map", icon: MapIcon, path: "/map" },
   { text: "Metrics", icon: MetricsIcon, path: "/metrics" },
 ];
+
 export const Header = () => {
   // TODO: Move to Board context
   const board = localStorage.getItem("board")
@@ -38,15 +39,36 @@ export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showBoardMenu, setShowBoardMenu] = useState<boolean>(false);
+  const [showSettingMenu, setShowSettingMenu] = useState<boolean>(false);
 
+  const { doPost } = usePost({
+    url: CONSTANTS.ENDPOINT.LOGOUT,
+    onSuccess: () => {
+      localStorage.removeItem("board");
+      sessionStorage.removeItem("token");
+      navigate("/login");
+    },
+  });
   const onSelectBoard = useCallback(
     (board: BoardDto) => {
       // TODO: Move to Board context
       localStorage.setItem("board", JSON.stringify(board));
-      navigate("/");
+      navigate("/job");
     },
     [navigate]
   );
+  const settings = useMemo(
+    () => [
+      { name: "Profile", onClick: () => navigate("/profile") },
+      { name: "Boards", onClick: () => navigate("/boards") },
+      { name: "Log out", onClick: () => doPost() },
+    ],
+    [navigate, doPost]
+  );
+  const onSelectSetting = useCallback((setting: (typeof settings)[number]) => {
+    setting.onClick();
+  }, []);
+
   return (
     <HeaderWrapper>
       <HStack justify="space-between" align="center" width="100%">
@@ -66,7 +88,6 @@ export const Header = () => {
             />
           )}
         </StyledIconTextWrapper>
-
         <HStack gap={20}>
           {menu.map((v) => (
             <StyledIconTextWrapper
@@ -74,15 +95,29 @@ export const Header = () => {
               key={v.text}
               gap={8}
               selected={location.pathname.includes(v.path)}
+              onClick={() => navigate(v.path)}
             >
               {v.icon({ color: colors.grayText })}
               <SmallText color={colors.grayText}>{v.text}</SmallText>
             </StyledIconTextWrapper>
           ))}
         </HStack>
-        <StyledIconTextWrapper align="center" gap={5} selected={false}>
+        <StyledIconTextWrapper
+          align="center"
+          gap={5}
+          selected={showSettingMenu}
+          onClick={() => setShowSettingMenu(true)}
+        >
           <SettingIcon color={colors.grayText} />
           <SmallText color={colors.grayText}>Setting</SmallText>
+          {showSettingMenu && (
+            <HoverMenu
+              data={settings}
+              onClick={onSelectSetting}
+              onClose={() => setShowSettingMenu(false)}
+              position="right"
+            />
+          )}
         </StyledIconTextWrapper>
       </HStack>
     </HeaderWrapper>
@@ -92,7 +127,7 @@ export const Header = () => {
 const HeaderWrapper = styled.div`
   display: flex;
   padding: 10px 16px;
-  background-color: ${colors.neutralGray1};
+  background-color: ${colors.white};
   box-shadow: 1px 3px 4px rgba(50, 50, 50, 0.3);
 `;
 

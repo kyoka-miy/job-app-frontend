@@ -38,8 +38,8 @@ export const Boards: React.FC = () => {
     url: CONSTANTS.ENDPOINT.BOARDS,
     onSuccess: (data) => {
       if (data.length === 1) {
-        sessionStorage.setItem("board", JSON.stringify(data[0]));
-        navigate("/");
+        localStorage.setItem("board", JSON.stringify(data[0]));
+        navigate("/job");
       }
     },
     // fetch data only when the user is on this page
@@ -48,7 +48,7 @@ export const Boards: React.FC = () => {
   const onSelectBoard = useCallback(
     (board: BoardDto) => {
       localStorage.setItem("board", JSON.stringify(board));
-      navigate("/");
+      navigate("/job");
     },
     [navigate]
   );

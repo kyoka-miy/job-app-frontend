@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
         font-family: "Poppins", sans-serif;
         font-size: 16px;
         font-color: ${colors.deepSlate};
-        background-color: ${colors.purple6};
+        background-color: ${colors.neutralGray1};
     }
 
     input, button, textarea, select, span{
