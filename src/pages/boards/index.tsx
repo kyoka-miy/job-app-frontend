@@ -33,6 +33,7 @@ export const Boards: React.FC = () => {
       setErrorMessage(err);
     },
   });
+  // TODO: Move to board context
   const { data, isLoading } = useFetch<BoardDto[]>({
     url: CONSTANTS.ENDPOINT.BOARDS,
     onSuccess: (data) => {

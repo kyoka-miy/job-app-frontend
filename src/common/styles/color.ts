@@ -13,4 +13,5 @@ export const colors = {
   deepSlate: "#333333",
   neutralBlack: '#282828',
   neutralGray1: '#F8F8F8',
+  grayText: "rgba(25, 4, 69, 0.6)",
 };

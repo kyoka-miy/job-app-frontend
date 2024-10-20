@@ -5,6 +5,7 @@ import { GlobalStyle } from "./common/styles/globalStyle";
 import { Login } from "./pages/login";
 import { CONSTANTS } from "./constants";
 import { Boards } from "./pages/boards";
+import { Home } from "./pages/home";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Route path={CONSTANTS.LINK.SIGN_UP} element={<SignUp />} />
         <Route path={CONSTANTS.LINK.LOGIN} element={<Login />} />
         <Route path={CONSTANTS.LINK.BOARD_SELECT} element={<Boards />} />
+        <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

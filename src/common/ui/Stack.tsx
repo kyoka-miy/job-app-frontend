@@ -7,6 +7,8 @@ type Props = {
   align?: CSSProperties["alignItems"]; // center, flex-start, flex-end
   justify?: CSSProperties["justifyContent"]; // center, space-between...
   className?: string;
+  width?: number | string;
+  onClick?: () => void;
 };
 
 type BaseProps = Props & {
@@ -35,5 +37,5 @@ const StyledStack = styled.div<BaseProps>`
   align-items: ${(p) => p.align};
   justify-content: ${(p) => p.justify};
   gap: ${(p) => p.gap}px;
-  width: 100%;
+  width: ${(p) => (typeof p.width === "number" ? `${p.width}px` : p.width)};
 `;
