@@ -13,14 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useCallback, useMemo, useState } from "react";
 import { useFetch, usePost } from "../common/hooks";
 import { BoardDto } from "../api-interface/board";
-import { CONSTANTS } from "../constants";
-
-const menu = [
-  { text: "Job", icon: JobIcon, path: CONSTANTS.LINK.JOB },
-  { text: "Calendar", icon: CalendarIcon, path: CONSTANTS.LINK.CALENDAR },
-  { text: "Map", icon: MapIcon, path: CONSTANTS.LINK.MAP },
-  { text: "Metrics", icon: MetricsIcon, path: CONSTANTS.LINK.METRICS },
-];
+import { CONSTANTS, HeaderMenu } from "../constants";
 
 export const Header = () => {
   // TODO: Move to Board context
@@ -89,7 +82,7 @@ export const Header = () => {
           )}
         </StyledIconTextWrapper>
         <HStack gap={20}>
-          {menu.map((v) => (
+          {HeaderMenu.map((v) => (
             <StyledIconTextWrapper
               align="center"
               key={v.text}

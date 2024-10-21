@@ -1,3 +1,5 @@
+import { CalendarIcon, JobIcon, MapIcon, MetricsIcon } from "./common/icons";
+
 const endpointBase = process.env.REACT_APP_ENDPOINT_BASE;
 export const CONSTANTS = {
   ENDPOINT: {
@@ -18,3 +20,23 @@ export const CONSTANTS = {
     BOARDS: `/boards`,
   },
 };
+
+interface HeaderMenuType {
+  text: string;
+  icon: any;
+  path: string;
+}
+
+export const HeaderMenu: HeaderMenuType[] = [
+  { text: "Job", icon: JobIcon, path: CONSTANTS.LINK.JOB },
+  { text: "Calendar", icon: CalendarIcon, path: CONSTANTS.LINK.CALENDAR },
+  { text: "Map", icon: MapIcon, path: CONSTANTS.LINK.MAP },
+  { text: "Metrics", icon: MetricsIcon, path: CONSTANTS.LINK.METRICS },
+];
+
+export const JobStatus = {
+  WISHLIST: 'Wishlist',
+  APPLIED: 'Applied',
+  INTERVIEW: 'Interview',
+  OFFER: 'Offer'
+} as const;

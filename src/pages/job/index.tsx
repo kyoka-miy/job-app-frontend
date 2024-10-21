@@ -1,24 +1,27 @@
 import styled from "styled-components";
-import { HStack, Tab, VStack } from "../../common";
+import { Button, HStack, Tab, VStack } from "../../common";
 import { ArrowIcon } from "../../common/icons";
+import { JobStatus } from "../../constants";
+import { useState } from "react";
 
 export const Job = () => {
+  const [status, setStatus] = useState<keyof typeof JobStatus>("WISHLIST");
   return (
     <VStack gap={20}>
-      <HStack>
-        <HStack align="center" gap={6}>
-          <Tab selected>Wishlist</Tab>
-          <ArrowIcon />
+      <HStack justify="space-between">
+        <HStack>
+          {(Object.keys(JobStatus) as Array<keyof typeof JobStatus>).map(
+            (v) => (
+              <HStack align="center" gap={6} key={v}>
+                <Tab onClick={() => setStatus(v)} selected={status === v}>
+                  {JobStatus[v]}
+                </Tab>
+                {v !== "OFFER" && <ArrowIcon />}
+              </HStack>
+            )
+          )}
         </HStack>
-        <HStack align="center" gap={6}>
-          <Tab>Applied</Tab>
-          <ArrowIcon />
-        </HStack>
-        <HStack align="center" gap={6}>
-          <Tab>Interview</Tab>
-          <ArrowIcon />
-        </HStack>
-        <Tab>Offer</Tab>
+        <Button>+ Add</Button>
       </HStack>
       <JobList>job</JobList>
     </VStack>
