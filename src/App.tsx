@@ -22,6 +22,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-// 401 unauthorized > redirect to login page
-// board is null in storage > redirect to boards page

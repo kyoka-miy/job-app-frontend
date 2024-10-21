@@ -16,10 +16,10 @@ import { BoardDto } from "../api-interface/board";
 import { CONSTANTS } from "../constants";
 
 const menu = [
-  { text: "Job", icon: JobIcon, path: "/job" },
-  { text: "Calendar", icon: CalendarIcon, path: "/calender" },
-  { text: "Map", icon: MapIcon, path: "/map" },
-  { text: "Metrics", icon: MetricsIcon, path: "/metrics" },
+  { text: "Job", icon: JobIcon, path: CONSTANTS.LINK.JOB },
+  { text: "Calendar", icon: CalendarIcon, path: CONSTANTS.LINK.CALENDAR },
+  { text: "Map", icon: MapIcon, path: CONSTANTS.LINK.MAP },
+  { text: "Metrics", icon: MetricsIcon, path: CONSTANTS.LINK.METRICS },
 ];
 
 export const Header = () => {
@@ -59,8 +59,8 @@ export const Header = () => {
   );
   const settings = useMemo(
     () => [
-      { name: "Profile", onClick: () => navigate("/profile") },
-      { name: "Boards", onClick: () => navigate("/boards") },
+      { name: "Profile", onClick: () => navigate(CONSTANTS.LINK.PROFILE) },
+      { name: "Boards", onClick: () => navigate(CONSTANTS.LINK.BOARDS) },
       { name: "Log out", onClick: () => doPost() },
     ],
     [navigate, doPost]

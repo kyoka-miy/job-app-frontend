@@ -10,5 +10,11 @@ export const CONSTANTS = {
     SIGN_UP: `/sign-up`,
     LOGIN: `/login`,
     BOARD_SELECT: `/board-select`,
+    JOB: `/job`,
+    CALENDAR: `/calendar`,
+    MAP: `/map`,
+    METRICS: `/metrics`,
+    PROFILE: `/profile`,
+    BOARDS: `/boards`,
   },
 };

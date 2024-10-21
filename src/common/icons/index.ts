@@ -4,3 +4,4 @@ export * from "./CalendarIcon";
 export * from "./MapIcon";
 export * from "./MetricsIcon";
 export * from "./SettingIcon";
+export * from "./ArrowIcon";

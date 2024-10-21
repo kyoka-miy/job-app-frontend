@@ -23,7 +23,7 @@ export const LargeText: React.FC<Props> = ({ children, ...props }) => {
 
 export const MediumText: React.FC<Props> = ({ children, ...props }) => {
   return (
-    <StyledText size={20} {...props}>
+    <StyledText size={18} {...props}>
       {children}
     </StyledText>
   );
@@ -38,7 +38,7 @@ export const SmallText: React.FC<Props> = ({ children, ...props }) => {
 };
 
 const StyledText = styled.span<BaseProps>`
-  font-weight: ${(p) => p.bold && "bold"};
+  font-weight: ${(p) => p.bold && "600"};
   color: ${(p) => (p.color ? p.color : colors.deepSlate)};
   font-size: ${(p) => p.size}px;
 `;
