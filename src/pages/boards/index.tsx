@@ -15,7 +15,7 @@ import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/styles";
 import moment from "moment";
-import { Modal } from "../../common/ui/Modal";
+import { Modal } from "../../common";
 import { ValidationUtil } from "../../common/utils/validation";
 import { usePost } from "../../common/hooks/usePost";
 
@@ -67,16 +67,12 @@ export const Boards: React.FC = () => {
         <Modal onClose={() => setShowModal(false)}>
           <VStack gap={40} align="center">
             <MediumText>Add a board</MediumText>
-            <VStack>
-              <StyledTextWrapper>
-                <SmallText>Name</SmallText>
-              </StyledTextWrapper>
-              <TextInput
-                value={name}
-                onChange={setName}
-                validate={(v) => ValidationUtil.require(v)}
-              />
-            </VStack>
+            <TextInput
+              value={name}
+              onChange={setName}
+              validate={(v) => ValidationUtil.require(v)}
+              title="Name"
+            />
             {errorMessage && (
               <SmallText color={colors.purple3}>{errorMessage}</SmallText>
             )}
@@ -162,9 +158,4 @@ const Panel = styled.div<{
   &:active {
     background-color: ${colors.purple2};
   }
-`;
-
-const StyledTextWrapper = styled.div`
-  text-align: left;
-  padding: 0 0 8px 8px;
 `;

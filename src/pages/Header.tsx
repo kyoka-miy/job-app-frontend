@@ -2,10 +2,6 @@ import styled from "styled-components";
 import { colors } from "../common/styles";
 import { HoverMenu, HStack, SmallText } from "../common";
 import {
-  CalendarIcon,
-  JobIcon,
-  MapIcon,
-  MetricsIcon,
   MoreVertIcon,
   SettingIcon,
 } from "../common/icons";

@@ -35,8 +35,14 @@ export const HeaderMenu: HeaderMenuType[] = [
 ];
 
 export const JobStatus = {
-  WISHLIST: 'Wishlist',
-  APPLIED: 'Applied',
-  INTERVIEW: 'Interview',
-  OFFER: 'Offer'
+  WISHLIST: "Wishlist",
+  APPLIED: "Applied",
+  INTERVIEW: "Interview",
+  OFFER: "Offer",
+} as const;
+
+export const WorkStyle = {
+  REMOTE: "Remote",
+  ON_SITE: "On-site",
+  HYBRID: "Hybrid",
 } as const;

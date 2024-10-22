@@ -13,6 +13,7 @@ type Props = {
   width?: number;
   type?: string;
   validate?: (v: any) => boolean;
+  title?: string;
 };
 
 export const TextInput: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const TextInput: React.FC<Props> = ({
   validate = () => true,
   value,
   errorMessage = "",
+  title,
   ...props
 }) => {
   const [isTouched, setIsTouched] = useState(false);
@@ -38,6 +40,11 @@ export const TextInput: React.FC<Props> = ({
 
   return (
     <VStack gap={8}>
+      {title && (
+        <StyledTextWrapper>
+          <SmallText>{title}</SmallText>
+        </StyledTextWrapper>
+      )}
       <StyledInput
         type={type}
         placeholder={placeholder}
@@ -99,4 +106,9 @@ const StyledInput = styled.input<{
 const StyledErrorWrapper = styled.div`
   padding: 0 0 0 8px;
   text-align: left;
+`;
+
+const StyledTextWrapper = styled.div`
+  text-align: left;
+  padding: 0 0 4px 4px;
 `;

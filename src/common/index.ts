@@ -4,3 +4,4 @@ export * from "./ui/Text";
 export * from "./ui/TextInput";
 export * from "./ui/HoverMenu";
 export * from "./ui/Tab";
+export * from "./ui/Modal";
