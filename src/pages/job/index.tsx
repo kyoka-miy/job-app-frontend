@@ -3,6 +3,7 @@ import {
   Button,
   HStack,
   Modal,
+  SelectBox,
   SmallText,
   Tab,
   TextInput,
@@ -31,6 +32,12 @@ export const Job = () => {
       [key]: value,
     }));
   };
+  const statusOptions = (
+    Object.keys(JobStatus) as Array<keyof typeof JobStatus>
+  ).map((key) => ({
+    name: key,
+    value: JobStatus[key],
+  }));
   return (
     <VStack gap={20}>
       <HStack justify="space-between">
@@ -77,11 +84,19 @@ export const Job = () => {
                 title="Post Url"
               />
             </HStack>
-            <TextInput
-              value={jobData.location}
-              onChange={(value) => handleInputChange(value, "location")}
-              title="Location"
-            />
+            <HStack gap={12}>
+              <TextInput
+                value={jobData.location}
+                onChange={(value) => handleInputChange(value, "location")}
+                title="Location"
+              />
+              <SelectBox
+                options={statusOptions}
+                value={jobData.status}
+                onChange={(value) => handleInputChange(value, "status")}
+                title="Status"
+              />
+            </HStack>
           </VStack>
         </Modal>
       )}

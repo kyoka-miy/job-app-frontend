@@ -103,12 +103,12 @@ const StyledInput = styled.input<{
   `}
 `;
 
-const StyledErrorWrapper = styled.div`
+export const StyledErrorWrapper = styled.div`
   padding: 0 0 0 8px;
   text-align: left;
 `;
 
-const StyledTextWrapper = styled.div`
+export const StyledTextWrapper = styled.div`
   text-align: left;
   padding: 0 0 4px 4px;
 `;
