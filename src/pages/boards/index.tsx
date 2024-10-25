@@ -72,6 +72,7 @@ export const Boards: React.FC = () => {
               onChange={setName}
               validate={(v) => ValidationUtil.require(v)}
               title="Name"
+              required
             />
             {errorMessage && (
               <SmallText color={colors.purple3}>{errorMessage}</SmallText>

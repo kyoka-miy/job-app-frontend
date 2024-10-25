@@ -7,13 +7,15 @@ import { colors } from "../styles";
 type Props = {
   placeholder?: string;
   errorMessage?: string;
-  value: string;
+  value?: string;
   onChange?: (v: any) => void;
   disabled?: boolean;
   width?: number;
+  height?: number;
   type?: string;
   validate?: (v: any) => boolean;
   title?: string;
+  required?: boolean;
 };
 
 export const TextInput: React.FC<Props> = ({
@@ -22,9 +24,10 @@ export const TextInput: React.FC<Props> = ({
   type = "text",
   onChange,
   validate = () => true,
-  value,
+  value = "",
   errorMessage = "",
   title,
+  required = false,
   ...props
 }) => {
   const [isTouched, setIsTouched] = useState(false);
@@ -37,26 +40,42 @@ export const TextInput: React.FC<Props> = ({
       setIsValid(validate(value));
     }
   }, [value, isTouched, validate]);
-
   return (
     <VStack gap={8}>
       {title && (
         <StyledTextWrapper>
-          <SmallText>{title}</SmallText>
+          <SmallText>
+            {title}
+            {required && <StyledSpan>*</StyledSpan>}
+          </SmallText>
         </StyledTextWrapper>
       )}
-      <StyledInput
-        type={type}
-        placeholder={placeholder}
-        hasError={!!errorMessage}
-        disabled={disabled}
-        onChange={(e) => {
-          onChange?.(e.target.value);
-        }}
-        value={value}
-        isValid={isValid}
-        {...props}
-      />
+      {type === "textarea" ? (
+        <StyledTextArea
+          placeholder={placeholder}
+          hasError={!!errorMessage}
+          disabled={disabled}
+          onChange={(e) => {
+            onChange?.(e.target.value);
+          }}
+          value={value}
+          isValid={isValid}
+          {...props}
+        />
+      ) : (
+        <StyledInput
+          type={type}
+          placeholder={placeholder}
+          hasError={!!errorMessage}
+          disabled={disabled}
+          onChange={(e) => {
+            onChange?.(e.target.value);
+          }}
+          value={value}
+          isValid={isValid}
+          {...props}
+        />
+      )}
       {errorMessage && (
         <StyledErrorWrapper>
           <SmallText color={colors.purple3}>{errorMessage}</SmallText>
@@ -69,20 +88,19 @@ export const TextInput: React.FC<Props> = ({
 const StyledInput = styled.input<{
   hasError: boolean;
   width?: number;
+  height?: number;
   isValid: boolean;
 }>`
   width: ${(p) => (p.width ? `${p.width}px` : "100%")};
-  padding: 12px 12px;
-  border: none;
+  height: ${(p) => (p.height ? `${p.height}px` : "fit-content")};
+  padding: 12px;
   border: 1px solid
     ${(props) =>
       props.hasError || !props.isValid ? colors.purple3 : colors.foggyGray};
   background-color: ${(props) =>
     props.disabled ? colors.softSilver : "transparent"};
   outline: none;
-  font-size: 16px;
   color: ${(props) => (props.hasError ? colors.purple3 : colors.deepSlate)};
-  transition: 0.2s ease;
   border-radius: 8px;
 
   &:focus {
@@ -110,5 +128,47 @@ export const StyledErrorWrapper = styled.div`
 
 export const StyledTextWrapper = styled.div`
   text-align: left;
-  padding: 0 0 4px 4px;
+  padding: 0 0 0 4px;
+`;
+
+const StyledSpan = styled.span`
+  font-size: 20px;
+  color: ${colors.purple3};
+`;
+
+const StyledTextArea = styled.textarea<{
+  hasError: boolean;
+  width?: number;
+  height?: number;
+  isValid: boolean;
+}>`
+  width: ${(p) => (p.width ? `${p.width}px` : "100%")} !important;
+  height: ${(p) => (p.height ? `${p.height}px` : "fit-content")} !important;
+  outline: none;
+  padding: 12px;
+  border: 1px solid
+    ${(props) =>
+      props.hasError || !props.isValid ? colors.purple3 : colors.foggyGray};
+  border-radius: 8px;
+  line-height: 1.5;
+  background-color: ${(props) =>
+    props.disabled ? colors.softSilver : "transparent"};
+  resize: none;
+  
+  &:focus {
+    border-color: ${(props) =>
+      props.hasError || !props.isValid ? colors.purple3 : colors.purple2};
+  }
+
+  &:hover {
+    border-color: ${(props) =>
+      props.hasError || !props.isValid ? colors.purple3 : colors.purple2};
+  }
+
+  ${(props) =>
+    props.disabled &&
+    `
+    pointer-events: none;
+    opacity: 0.6;
+  `}
 `;

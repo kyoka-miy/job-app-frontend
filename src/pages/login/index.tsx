@@ -87,14 +87,20 @@ export const Login: React.FC = () => {
                 {errorMessage}
               </StyledSmallText>
             </VStack>
-            <Button
-              width={220}
-              onClick={() => refetch()}
-              loading={isLoading}
-              disabled={!isAllValid}
-            >
-              Log In
-            </Button>
+            <VStack align="center" gap={20}>
+              <Button
+                width={220}
+                onClick={() => refetch()}
+                loading={isLoading}
+                disabled={!isAllValid}
+              >
+                Log In
+              </Button>
+              <SmallText>
+                You don't have an account yet?{" "}
+                <a href={CONSTANTS.LINK.SIGN_UP}>Please sign up from here</a>
+              </SmallText>
+            </VStack>
           </VStack>
         </FormWrapper>
       </VStack>

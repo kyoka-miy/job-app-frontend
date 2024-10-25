@@ -6,3 +6,4 @@ export * from "./ui/HoverMenu";
 export * from "./ui/Tab";
 export * from "./ui/Modal";
 export * from "./ui/SelectBox";
+export * from "./ui/CheckBox";

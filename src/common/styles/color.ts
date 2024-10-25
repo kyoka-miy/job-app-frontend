@@ -15,4 +15,5 @@ export const colors = {
   neutralGray1: "#F8F8F8",
   white: "#FFFFFF",
   grayText: "rgba(25, 4, 69, 0.6)",
+  hoverMenuBg: "#5a5a5a",
 };

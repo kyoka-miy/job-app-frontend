@@ -12,15 +12,23 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const token = sessionStorage.getItem("token");
-  const headers: HeadersInit = useMemo(
-    () => ({
+  // move to board context
+  const board = localStorage.getItem("board");
+  const parsedBoard = board ? JSON.parse(board) : null;
+  const headers: HeadersInit = useMemo(() => {
+    const baseHeaders: HeadersInit = {
       "Content-Type": "application/json",
-    }),
-    []
-  );
-  if (token && !url.includes("auth")) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
+    };
+    if (token && !url.includes("auth")) {
+      baseHeaders["Authorization"] = `Bearer ${token}`;
+    }
+    if (parsedBoard) {
+      baseHeaders["Board-Id"] = parsedBoard.boardId;
+    }
+
+    return baseHeaders;
+  }, [token, url, parsedBoard]);
+
   const doPost = useCallback(
     async (body?: any) => {
       try {

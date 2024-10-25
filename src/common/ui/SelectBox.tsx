@@ -11,6 +11,7 @@ type Props = {
   onChange: (v: string) => void;
   errorMessage?: string;
   title?: string;
+  width?: string | number;
 };
 export const SelectBox: React.FC<Props> = ({
   options,
@@ -18,6 +19,7 @@ export const SelectBox: React.FC<Props> = ({
   onChange,
   errorMessage,
   title,
+  width = "100%",
 }) => {
   const [optionIsOpen, setOptionIsOpen] = useState<boolean>(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -42,7 +44,7 @@ export const SelectBox: React.FC<Props> = ({
           <SmallText>{title}</SmallText>
         </StyledTextWrapper>
       )}
-      <SelectWrapper ref={wrapperRef}>
+      <SelectWrapper ref={wrapperRef} width={width}>
         <StyledSelect
           value={value}
           onClick={() => setOptionIsOpen((prev) => !prev)}
@@ -54,7 +56,7 @@ export const SelectBox: React.FC<Props> = ({
               <OptionItem
                 key={option.name}
                 onClick={() => {
-                  onChange(option.value);
+                  onChange(option.name);
                   setOptionIsOpen(false);
                 }}
               >
@@ -75,9 +77,9 @@ export const SelectBox: React.FC<Props> = ({
   );
 };
 
-const SelectWrapper = styled.div`
+const SelectWrapper = styled.div<{ width: string | number }>`
   position: relative;
-  width: 100%;
+  width: ${(p) => (typeof p.width === "number" ? `${p.width}px` : p.width)};
 `;
 
 const StyledSelect = styled.input<{ errorMessage?: string }>`
@@ -97,6 +99,8 @@ const StyledSelect = styled.input<{ errorMessage?: string }>`
 
   &:hover {
     cursor: pointer;
+    border-color: ${(props) =>
+      props.errorMessage ? colors.purple3 : colors.purple2};
   }
 `;
 
@@ -117,11 +121,14 @@ const OptionWrapper = styled.div`
   position: absolute;
   width: 100%;
   max-height: 300px;
+  text-align: left;
+  padding: 8px 0;
+  background-color: ${colors.hoverMenuBg};
 `;
 
 const OptionItem = styled.div`
   padding: 8px 12px;
-  background-color: #5a5a5a;
+
   &:hover {
     cursor: pointer;
   }

@@ -5,7 +5,7 @@ import { colors } from "../styles";
 type ButtonType = "primary";
 
 type Props = {
-  width?: number;
+  width?: number | string;
   disabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const Button = ({
-  width,
+  width = "auto",
   disabled = false,
   onClick,
   children,
@@ -35,7 +35,7 @@ export const Button = ({
 
 const StyledButton = styled.button<{
   buttonType?: ButtonType;
-  width?: number;
+  width?: number | string;
   disabled?: boolean;
 }>`
   display: inline-flex;
@@ -45,7 +45,7 @@ const StyledButton = styled.button<{
   border-radius: 8px;
   cursor: pointer;
   border: none;
-  width: ${(props) => (props.width ? `${props.width}px` : "auto")};
+  width: ${(p) => (typeof p.width === "number" ? `${p.width}px` : p.width)};
   transition: 0.2s ease;
 
   ${(props) =>
