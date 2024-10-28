@@ -14,17 +14,16 @@ type Props = {
   shouldFetch?: boolean;
 };
 
-export const useFetch = <T,>({
+export const useFetch = <T, >({
   url,
   onSuccess,
   onError,
   params,
   shouldFetch = false,
 }: Props) => {
-  console.log(shouldFetch);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<T | null>();
+  const [data, setData] = useState<T | null>(null);
   const token = sessionStorage.getItem("token");
   const headers: HeadersInit = useMemo(() => {
     const baseHeaders = {

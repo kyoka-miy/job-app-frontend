@@ -1,19 +1,22 @@
 import styled from "styled-components";
-import {
-  Button,
-  HStack,
-  Tab,
-  VStack,
-} from "../../common";
+import { Button, HStack, Tab, VStack } from "../../common";
 import { ArrowIcon } from "../../common/icons";
-import { JobStatus } from "../../constants";
+import { CONSTANTS, JobStatus } from "../../constants";
 import { useState } from "react";
 import { AddJobModal } from "./AddJobModal";
+import { IJob } from "../../api-interface/job";
+import { useFetch } from "../../common/hooks";
 
 export const Job = () => {
   const [status, setStatus] = useState<keyof typeof JobStatus>("WISHLIST");
   const [showAddJobModal, setShowAddJobModal] = useState<boolean>(false);
-
+  const [jobs, setJobs] = useState<IJob[] | null>(null);
+  const { data } = useFetch<IJob[]>({
+    url: CONSTANTS.ENDPOINT.JOBS,
+    onSuccess: () => {
+      setJobs(data);
+    }
+  })
   return (
     <VStack gap={20}>
       <HStack justify="space-between">
@@ -29,7 +32,9 @@ export const Job = () => {
             )
           )}
         </HStack>
-        <Button onClick={() => setShowAddJobModal(true)} bold plusIcon>Add Job</Button>
+        <Button onClick={() => setShowAddJobModal(true)} bold plusIcon>
+          Add Job
+        </Button>
       </HStack>
       <JobList>job</JobList>
       {showAddJobModal && (
