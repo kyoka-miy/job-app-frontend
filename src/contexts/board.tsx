@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 interface BoardContextType {
   board: BoardDto | null;
   setBoard: (v: any) => void;
+  setBoardStore: (v: any) => void;
+  setBoards: (v: any[]) => void;
+  boards: BoardDto[] | null;
 }
 
 type Props = {
@@ -16,35 +19,45 @@ type Props = {
 export const BoardContext = createContext<BoardContextType>({
   board: null,
   setBoard: () => {},
+  setBoardStore: () => {},
+  setBoards: () => {},
+  boards: null,
 });
 
 export const BoardContextProvider: React.FC<Props> = ({ children }) => {
   const navigate = useNavigate();
   const [board, setBoard] = useState<BoardDto | null>(() => {
-    const storedBoard = sessionStorage.getItem("board");
+    const storedBoard = localStorage.getItem("board");
     return storedBoard ? JSON.parse(storedBoard) : null;
   });
+  const [boards, setBoards] = useState<BoardDto[] | null>(null);
+  const setBoardStore = (board: BoardDto) => {
+    localStorage.setItem("board", JSON.stringify(board));
+  };
 
-  if (sessionStorage.getItem("token") !== null)
-    navigate(CONSTANTS.LINK.BOARD_SELECT);
-
-  useFetch({
+  useFetch<BoardDto>({
     url: CONSTANTS.ENDPOINT.BOARDS,
     onSuccess: (data) => {
       if (data.length === 1) {
         const selectedBoard = data[0];
         setBoard(selectedBoard);
-        sessionStorage.setItem("board", JSON.stringify(selectedBoard));
-        navigate("/job");
-      } else navigate(CONSTANTS.LINK.BOARD_SELECT);
+        setBoardStore(selectedBoard);
+        navigate(CONSTANTS.LINK.JOB);
+      } else {
+        setBoards(data);
+      }
     },
-    onError: () => {
+    onError: (err) => {
+      console.log(err);
       navigate(CONSTANTS.LINK.SIGN_UP);
     },
+    shouldFetch: true
   });
 
   return (
-    <BoardContext.Provider value={{ board, setBoard }}>
+    <BoardContext.Provider
+      value={{ board, setBoard, setBoardStore, setBoards, boards }}
+    >
       {children}
     </BoardContext.Provider>
   );

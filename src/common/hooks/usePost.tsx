@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants";
+import { useBoardContext } from "../../contexts/board";
 
 type Props = {
   url: string;
@@ -12,9 +13,7 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const token = sessionStorage.getItem("token");
-  // move to board context
-  const board = localStorage.getItem("board");
-  const parsedBoard = board ? JSON.parse(board) : null;
+  const { board } = useBoardContext();
   const headers: HeadersInit = useMemo(() => {
     const baseHeaders: HeadersInit = {
       "Content-Type": "application/json",
@@ -22,12 +21,12 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
     if (token && !url.includes("auth")) {
       baseHeaders["Authorization"] = `Bearer ${token}`;
     }
-    if (parsedBoard) {
-      baseHeaders["Board-Id"] = parsedBoard.boardId;
+    if (board) {
+      baseHeaders["Board-Id"] = board.boardId;
     }
-
+    
     return baseHeaders;
-  }, [token, url, parsedBoard]);
+  }, [token, url, board]);
 
   const doPost = useCallback(
     async (body?: any) => {

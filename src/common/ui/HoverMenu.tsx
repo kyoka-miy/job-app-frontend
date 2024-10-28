@@ -56,6 +56,7 @@ const StyledHoverMenuWrapper = styled.div<{ position: string }>`
   max-height: 400px;
   overflow-y: auto;
   box-shadow: 1px 3px 4px rgba(50, 50, 50, 0.3);
+  z-index: 100;
 `;
 
 const StyledMenuTextWrapper = styled.div`

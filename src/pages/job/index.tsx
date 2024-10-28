@@ -29,7 +29,7 @@ export const Job = () => {
             )
           )}
         </HStack>
-        <Button onClick={() => setShowAddJobModal(true)}>+ Add Job</Button>
+        <Button onClick={() => setShowAddJobModal(true)} bold plusIcon>Add Job</Button>
       </HStack>
       <JobList>job</JobList>
       {showAddJobModal && (

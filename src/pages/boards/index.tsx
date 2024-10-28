@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { useFetch } from "../../common/hooks/useFetch";
 import { CONSTANTS } from "../../constants";
 import { BoardDto } from "../../api-interface/board";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +17,7 @@ import moment from "moment";
 import { Modal } from "../../common";
 import { ValidationUtil } from "../../common/utils/validation";
 import { usePost } from "../../common/hooks/usePost";
+import { useBoardContext } from "../../contexts/board";
 
 export const Boards: React.FC = () => {
   const navigate = useNavigate();
@@ -33,22 +33,12 @@ export const Boards: React.FC = () => {
       setErrorMessage(err);
     },
   });
-  // TODO: Move to board context
-  const { data, isLoading } = useFetch<BoardDto[]>({
-    url: CONSTANTS.ENDPOINT.BOARDS,
-    onSuccess: (data) => {
-      if (data.length === 1) {
-        localStorage.setItem("board", JSON.stringify(data[0]));
-        navigate("/job");
-      }
-    },
-    // fetch data only when the user is on this page
-    shouldFetch: true,
-  });
+  const { boards, setBoardStore } = useBoardContext();
+
   const onSelectBoard = useCallback(
     (board: BoardDto) => {
-      localStorage.setItem("board", JSON.stringify(board));
-      navigate("/job");
+      setBoardStore(board);
+      navigate(CONSTANTS.LINK.JOB);
     },
     [navigate]
   );
@@ -87,19 +77,17 @@ export const Boards: React.FC = () => {
           </VStack>
         </Modal>
       )}
-      {isLoading ? (
-        <SmallText>...Loading</SmallText>
-      ) : (
+      (
         <BoardWrapper>
           <VStack gap={50} align="center">
             <LargeText bold>Select Your Board</LargeText>
             <VStack gap={40} align="center">
-              <Button width={220} onClick={() => setShowModal(true)}>
-                + Add a new board
+              <Button width={220} onClick={() => setShowModal(true)} plusIcon>
+                Add board
               </Button>
               <VStack gap={24}>
                 <BoardList>
-                  {data?.map((v, index) => (
+                  {boards?.map((v, index) => (
                     <div key={index} style={{ margin: 20 }}>
                       <Panel
                         width={280}
@@ -120,7 +108,7 @@ export const Boards: React.FC = () => {
             </VStack>
           </VStack>
         </BoardWrapper>
-      )}
+      )
     </>
   );
 };

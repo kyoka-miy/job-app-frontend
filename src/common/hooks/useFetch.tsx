@@ -21,6 +21,7 @@ export const useFetch = <T,>({
   params,
   shouldFetch = false,
 }: Props) => {
+  console.log(shouldFetch);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<T | null>();

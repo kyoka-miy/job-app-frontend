@@ -170,8 +170,10 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
           }
           width="100%"
           loading={isLoading}
+          bold
+          plusIcon
         >
-          + Add
+          Add
         </Button>
       </VStack>
     </Modal>

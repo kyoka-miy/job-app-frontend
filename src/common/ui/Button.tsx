@@ -1,6 +1,9 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { colors } from "../styles";
+import { PlusIcon } from "../icons";
+import { SmallText } from "./Text";
+import { HStack } from "..";
 
 type ButtonType = "primary";
 
@@ -11,6 +14,8 @@ type Props = {
   children: React.ReactNode;
   loading?: boolean;
   type?: ButtonType;
+  bold?: boolean;
+  plusIcon?: boolean;
 };
 
 export const Button = ({
@@ -20,6 +25,8 @@ export const Button = ({
   children,
   loading = false,
   type = "primary",
+  bold = false,
+  plusIcon = false,
 }: Props) => {
   return (
     <StyledButton
@@ -27,16 +34,24 @@ export const Button = ({
       width={width}
       disabled={disabled}
       onClick={onClick}
+      bold={bold}
     >
-      {loading ? "Loading..." : children}
+      <HStack gap={4} align="center">
+        {plusIcon && <StyledPlusIcon disabled={disabled} />}
+        {loading ? <SmallText>Loading...</SmallText> : children}
+      </HStack>
     </StyledButton>
   );
 };
 
+const StyledPlusIcon = styled(PlusIcon)<{ disabled?: boolean }>`
+  color: ${(p) => (p.disabled ? colors.mutedGraphite : colors.white)};
+`;
 const StyledButton = styled.button<{
   buttonType?: ButtonType;
   width?: number | string;
   disabled?: boolean;
+  bold: boolean;
 }>`
   display: inline-flex;
   align-items: center;
@@ -47,12 +62,18 @@ const StyledButton = styled.button<{
   border: none;
   width: ${(p) => (typeof p.width === "number" ? `${p.width}px` : p.width)};
   transition: 0.2s ease;
+  ${(p) =>
+    p.bold &&
+    `
+    font-weight: 600;
+  `}
 
   ${(props) =>
     props.buttonType === "primary" &&
     css`
       background-color: ${colors.purple1};
-      color: ${colors.purple6};
+      color: ${colors.white};
+
       &:hover {
         background-color: ${!props.disabled && colors.purple7};
       }

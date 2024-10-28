@@ -1,30 +1,16 @@
 import styled from "styled-components";
 import { colors } from "../common/styles";
 import { HoverMenu, HStack, SmallText } from "../common";
-import {
-  MoreVertIcon,
-  SettingIcon,
-} from "../common/icons";
+import { MoreVertIcon, SettingIcon } from "../common/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCallback, useMemo, useState } from "react";
-import { useFetch, usePost } from "../common/hooks";
+import { usePost } from "../common/hooks";
 import { BoardDto } from "../api-interface/board";
 import { CONSTANTS, HeaderMenu } from "../constants";
+import { useBoardContext } from "../contexts/board";
 
 export const Header = () => {
-  // TODO: Move to Board context
-  const board = localStorage.getItem("board")
-    ? JSON.parse(localStorage.getItem("board") || "{}")
-    : null;
-  const [boards, setBoards] = useState<BoardDto[] | null>();
-  useFetch<BoardDto[]>({
-    url: CONSTANTS.ENDPOINT.BOARDS,
-    onSuccess: (data) => {
-      setBoards(data);
-    },
-    shouldFetch: true,
-  });
-
+  const { board, setBoard, setBoardStore, boards } = useBoardContext();
   const location = useLocation();
   const navigate = useNavigate();
   const [showBoardMenu, setShowBoardMenu] = useState<boolean>(false);
@@ -40,11 +26,11 @@ export const Header = () => {
   });
   const onSelectBoard = useCallback(
     (board: BoardDto) => {
-      // TODO: Move to Board context
-      localStorage.setItem("board", JSON.stringify(board));
-      navigate("/job");
+      setBoardStore(board);
+      setBoard(board);
+      window.location.reload();
     },
-    [navigate]
+    [setBoardStore, setBoard]
   );
   const settings = useMemo(
     () => [
@@ -68,7 +54,7 @@ export const Header = () => {
           onClick={() => setShowBoardMenu(true)}
         >
           <MoreVertIcon color={colors.grayText} />
-          <SmallText color={colors.grayText}>{board.name}</SmallText>
+          <SmallText color={colors.grayText}>{board?.name}</SmallText>
           {showBoardMenu && boards && (
             <HoverMenu
               data={boards}
