@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants";
+import { useBoardContext } from "../../contexts/board";
 
 interface Params {
   [key: string]: any;
@@ -22,21 +23,22 @@ export const useFetch = <T, >({
   shouldFetch = false,
 }: Props) => {
   const navigate = useNavigate();
+  const { board } = useBoardContext();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<T | null>(null);
   const token = sessionStorage.getItem("token");
   const headers: HeadersInit = useMemo(() => {
-    const baseHeaders = {
+    const baseHeaders: HeadersInit = {
       "Content-Type": "application/json",
     };
     if (token && !url.includes("auth")) {
-      return {
-        ...baseHeaders,
-        Authorization: `Bearer ${token}`,
-      };
+      baseHeaders["Authorization"] = `Bearer ${token}`;
+    }
+    if (board) {
+      baseHeaders["Board-Id"] = board.boardId;
     }
     return baseHeaders;
-  }, [token, url]);
+  }, [token, url, board]);
 
   const query = useMemo(
     () => (params ? `?${new URLSearchParams(params).toString()}` : ""),

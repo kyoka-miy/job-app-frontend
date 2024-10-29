@@ -25,7 +25,7 @@ const HomeWrapper = styled.div`
 
 const ContentArea = styled.div`
   box-sizing: content-box;
-  width: 1160px;
+  width: 85%;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 0px;
 `;

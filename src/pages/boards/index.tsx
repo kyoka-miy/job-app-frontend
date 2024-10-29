@@ -40,7 +40,7 @@ export const Boards: React.FC = () => {
       setBoardStore(board);
       navigate(CONSTANTS.LINK.JOB);
     },
-    [navigate]
+    [setBoardStore, navigate]
   );
   const onAddBoard = useCallback(
     (name: string) => {
