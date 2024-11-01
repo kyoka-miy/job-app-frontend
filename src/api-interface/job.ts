@@ -21,6 +21,7 @@ export type AddOrUpdateJobRequest = {
     companyName: string,
     url?: string,
     location?: string,
+    placeId?: string,
     salary?: string,
     workStyle?:keyof typeof WorkStyle,
     status: keyof typeof JobStatus,

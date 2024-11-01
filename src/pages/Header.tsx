@@ -9,6 +9,17 @@ import { BoardDto } from "../api-interface/board";
 import { CONSTANTS, HeaderMenu } from "../constants";
 import { useBoardContext } from "../contexts/board";
 
+const settings = [
+  {
+    key: "Profile",
+    value: "Profile",
+  },
+  {
+    key: "Boards",
+    value: "Boards",
+  },
+  { key: "Log out", value: "Log out" },
+];
 export const Header = () => {
   const { board, setBoard, setBoardStore, boards } = useBoardContext();
   const location = useLocation();
@@ -32,18 +43,23 @@ export const Header = () => {
     },
     [setBoardStore, setBoard]
   );
-  const settings = useMemo(
-    () => [
-      { name: "Profile", onClick: () => navigate(CONSTANTS.LINK.PROFILE) },
-      { name: "Boards", onClick: () => navigate(CONSTANTS.LINK.BOARDS) },
-      { name: "Log out", onClick: () => doPost() },
-    ],
+
+  const onSelectSetting = useCallback(
+    (key: string) => {
+      if (key === "Profile") navigate(CONSTANTS.LINK.PROFILE);
+      else if (key === "Boards") navigate(CONSTANTS.LINK.BOARDS);
+      else doPost();
+    },
     [navigate, doPost]
   );
-  const onSelectSetting = useCallback((setting: (typeof settings)[number]) => {
-    setting.onClick();
-  }, []);
-
+  const boardOptions = useMemo(
+    () =>
+      boards?.map((board) => ({
+        key: board,
+        value: board.name,
+      })) || [],
+    [boards]
+  );
   return (
     <HeaderWrapper>
       <HStack justify="space-between" align="center" width="100%">
@@ -57,7 +73,7 @@ export const Header = () => {
           <SmallText color={colors.grayText}>{board?.name}</SmallText>
           {showBoardMenu && boards && (
             <HoverMenu
-              data={boards}
+              options={boardOptions}
               onClick={onSelectBoard}
               onClose={() => setShowBoardMenu(false)}
             />
@@ -87,7 +103,7 @@ export const Header = () => {
           <SmallText color={colors.grayText}>Setting</SmallText>
           {showSettingMenu && (
             <HoverMenu
-              data={settings}
+              options={settings}
               onClick={onSelectSetting}
               onClose={() => setShowSettingMenu(false)}
               position="right"

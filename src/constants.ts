@@ -8,6 +8,7 @@ export const CONSTANTS = {
     LOGOUT: `${endpointBase}/account-logout`,
     BOARDS: `${endpointBase}/boards`,
     JOBS: `${endpointBase}/jobs`,
+    PLACES: `${endpointBase}/places`
   },
   LINK: {
     SIGN_UP: `/sign-up`,
@@ -19,6 +20,7 @@ export const CONSTANTS = {
     METRICS: `/metrics`,
     PROFILE: `/profile`,
     BOARDS: `/boards`,
+
   },
 };
 

@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   CheckBox,
+  HoverMenu,
   HStack,
   Modal,
   SelectBox,
@@ -10,11 +11,14 @@ import {
   VStack,
 } from "../../common";
 import { AddOrUpdateJobRequest } from "../../api-interface/job";
-import { usePost } from "../../common/hooks";
+import { useFetch, usePost } from "../../common/hooks";
 import { CONSTANTS, JobStatus, WorkStyle } from "../../constants";
 import { ValidationUtil } from "../../common/utils/validation";
 import { format } from "date-fns";
 import { colors } from "../../common/styles";
+import { PlaceSuggestionDto } from "../../api-interface/placeSuggestion";
+import { debounce } from "lodash";
+import styled from "styled-components";
 
 type Props = {
   onClose: () => void;
@@ -27,6 +31,7 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
     appliedDate: undefined,
     url: "",
     location: "",
+    placeId: "",
     salary: "",
     jobBoard: "",
     status: "APPLIED",
@@ -38,6 +43,27 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
     onSuccess: () => window.location.reload(),
     onError: (err) => setErrorMessage(err),
   });
+
+  const { data: placeSuggestions, refetch } = useFetch<PlaceSuggestionDto[]>({
+    url: CONSTANTS.ENDPOINT.PLACES,
+    params: { input: jobData.location },
+  });
+  const debouncedFetchSuggestions = useCallback(
+    debounce(() => refetch(), 500),
+    [refetch]
+  );
+  useEffect(() => {
+    debouncedFetchSuggestions();
+    return () => debouncedFetchSuggestions.cancel();
+  }, [jobData.location]);
+  const placeSuggestionOptions = useMemo(
+    () =>
+      placeSuggestions?.map((v) => ({
+        key: v.placeId,
+        value: v.description,
+      })) || [],
+    [placeSuggestions]
+  );
   const statusOptions = useMemo(
     () =>
       (Object.keys(JobStatus) as Array<keyof typeof JobStatus>).map((key) => ({
@@ -61,6 +87,20 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
     },
     [setJobData]
   );
+// state for suggestions
+  const handleLocationChange = useCallback((key: string) => {
+    const description = placeSuggestionOptions.find(
+      (v) => v.key === key
+    )?.value;
+    console.log(key);
+    console.log(placeSuggestionOptions);
+    console.log(description);
+    setJobData((prev) => ({
+      ...prev,
+      location: description,
+      placeId: key,
+    }));
+  }, [placeSuggestionOptions]);
   const handleCheckBoxChange = useCallback(
     (key: keyof typeof WorkStyle) => {
       if (jobData.workStyle === key)
@@ -116,11 +156,21 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
             />
           </HStack>
           <HStack gap={12}>
-            <TextInput
-              value={jobData.location}
-              onChange={(value) => handleInputChange(value, "location")}
-              title="Location"
-            />
+            <StyledWrapper>
+              <TextInput
+                value={jobData.location}
+                onChange={(value) => handleInputChange(value, "location")}
+                title="Location"
+              />
+              {placeSuggestions && placeSuggestions.length > 0 && (
+                <HoverMenu
+                  options={placeSuggestionOptions}
+                  onClick={(v) => handleLocationChange(v)}
+                  onClose={() => {}}
+                  top={72}
+                />
+              )}
+            </StyledWrapper>
             <TextInput
               value={jobData.salary}
               onChange={(value) => handleInputChange(value, "salary")}
@@ -179,3 +229,8 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
     </Modal>
   );
 };
+
+const StyledWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;

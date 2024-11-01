@@ -4,16 +4,18 @@ import { SmallText, VStack } from "..";
 import { useEffect, useRef } from "react";
 
 type Props = {
-  data: any;
+  options: { key: any; value: string }[];
   onClick: (v: any) => void;
   onClose: () => void;
   position?: string;
+  top?: number;
 };
 // Need to add 'position: relative' to the parent component
 export const HoverMenu = ({
-  data,
+  options,
   onClick,
   onClose,
+  top = 33,
   position = "left",
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -29,11 +31,11 @@ export const HoverMenu = ({
   }, [onClose]);
 
   return (
-    <StyledHoverMenuWrapper ref={ref} position={position}>
+    <StyledHoverMenuWrapper ref={ref} position={position} top={top}>
       <VStack align="left">
-        {data.map((v: any, index: number) => (
-          <StyledMenuTextWrapper onClick={() => onClick(v)} key={index}>
-            <SmallText color={colors.grayText}>{v.name}</SmallText>
+        {options.map((v: { key: any; value: string }, index: number) => (
+          <StyledMenuTextWrapper onClick={() => onClick(v.key)} key={index}>
+            <SmallText color={colors.grayText}>{v.value}</SmallText>
           </StyledMenuTextWrapper>
         ))}
       </VStack>
@@ -41,9 +43,9 @@ export const HoverMenu = ({
   );
 };
 
-const StyledHoverMenuWrapper = styled.div<{ position: string }>`
+const StyledHoverMenuWrapper = styled.div<{ position: string; top: number }>`
   position: absolute;
-  top: 33px;
+  top: ${(p) => `${p.top}px`};
   ${(p) =>
     p.position === "left"
       ? "left: 0;"
@@ -52,7 +54,7 @@ const StyledHoverMenuWrapper = styled.div<{ position: string }>`
       : ""}
   border-radius: 8px;
   background-color: ${colors.neutralGray1};
-  width: 200px;
+  width: 195px;
   max-height: 400px;
   overflow-y: auto;
   box-shadow: 1px 3px 4px rgba(50, 50, 50, 0.3);
