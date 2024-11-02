@@ -12,7 +12,7 @@ import {
 } from "../../common";
 import { AddOrUpdateJobRequest } from "../../api-interface/job";
 import { useFetch, usePost } from "../../common/hooks";
-import { CONSTANTS, JobStatus, WorkStyle } from "../../constants";
+import { CONSTANTS, JobStatus, statusOptions, WorkStyle } from "../../constants";
 import { ValidationUtil } from "../../common/utils/validation";
 import { format } from "date-fns";
 import { colors } from "../../common/styles";
@@ -23,13 +23,6 @@ import styled from "styled-components";
 type Props = {
   onClose: () => void;
 };
-
-const statusOptions = (
-  Object.keys(JobStatus) as Array<keyof typeof JobStatus>
-).map((key) => ({
-  name: key,
-  value: JobStatus[key],
-}));
 
 export const AddJobModal: React.FC<Props> = ({ onClose }) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -48,7 +41,7 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
   });
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   
-  const { doPost, isLoading } = usePost({
+  const { doPost: addJob, isLoading } = usePost({
     url: CONSTANTS.ENDPOINT.JOBS,
     onSuccess: () => window.location.reload(),
     onError: (err) => setErrorMessage(err),
@@ -224,7 +217,7 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
           <SmallText color={colors.purple3}>{errorMessage}</SmallText>
         )}
         <Button
-          onClick={() => doPost(jobData)}
+          onClick={() => addJob(jobData)}
           disabled={
             !(jobData.companyName.length > 0 && jobData.jobTitle.length > 0)
           }
@@ -240,7 +233,7 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
   );
 };
 
-const StyledWrapper = styled.div`
+export const StyledWrapper = styled.div`
   position: relative;
   width: 100%;
 `;

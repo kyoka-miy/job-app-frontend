@@ -3,13 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants";
 import { useBoardContext } from "../../contexts/board";
 
+type Method = "POST" | "PUT";
+
 type Props = {
   url: string;
+  method?: Method;
   onSuccess?: (data?: any) => void;
   onError?: (err?: any) => void;
 };
 
-export const usePost = ({ url, onSuccess, onError }: Props) => {
+export const usePost = ({ url, method = "POST", onSuccess, onError }: Props) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const token = sessionStorage.getItem("token");
@@ -24,7 +27,7 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
     if (board) {
       baseHeaders["Board-Id"] = board.boardId;
     }
-    
+
     return baseHeaders;
   }, [token, url, board]);
 
@@ -33,7 +36,7 @@ export const usePost = ({ url, onSuccess, onError }: Props) => {
       try {
         setIsLoading(true);
         const response = await fetch(url, {
-          method: "POST",
+          method,
           headers,
           body: JSON.stringify(body),
         });

@@ -5,7 +5,7 @@ import { PlusIcon } from "../icons";
 import { SmallText } from "./Text";
 import { HStack } from "..";
 
-type ButtonType = "primary";
+type ButtonType = "primary" | "secondary";
 
 type Props = {
   width?: number | string;
@@ -61,7 +61,6 @@ const StyledButton = styled.button<{
   cursor: pointer;
   border: none;
   width: ${(p) => (typeof p.width === "number" ? `${p.width}px` : p.width)};
-  transition: 0.2s ease;
   ${(p) =>
     p.bold &&
     `
@@ -78,10 +77,24 @@ const StyledButton = styled.button<{
         background-color: ${!props.disabled && colors.purple7};
       }
       &:active {
-        background-color: ${!props.disabled &&
-        colors.purple2}; /* Change color on click */
+        background-color: ${!props.disabled && colors.purple2}; /* Change color on click */
       }
     `}
+
+    ${(props) =>
+      props.buttonType === "secondary" &&
+      css`
+        background-color: ${colors.white};
+        color: ${colors.purple1};
+        border: 1px solid ${colors.purple1};
+  
+        &:hover {
+          background-color: ${!props.disabled && colors.purple6};
+        }
+        &:active {
+          background-color: ${!props.disabled && colors.purple5};
+        }
+      `}
 
   ${(props) =>
     props.disabled &&

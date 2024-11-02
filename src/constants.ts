@@ -1,4 +1,5 @@
-import { CalendarIcon, JobIcon, MapIcon, MetricsIcon } from "./common/icons";
+import { ActivityIcon, CalendarIcon, CompanyIcon, InfoIcon, JobIcon, MapIcon, MetricsIcon } from "./common/icons";
+import { NoteIcon } from "./common/icons/NoteIcon";
 
 const endpointBase = process.env.REACT_APP_ENDPOINT_BASE;
 export const CONSTANTS = {
@@ -8,7 +9,8 @@ export const CONSTANTS = {
     LOGOUT: `${endpointBase}/account-logout`,
     BOARDS: `${endpointBase}/boards`,
     JOBS: `${endpointBase}/jobs`,
-    PLACES: `${endpointBase}/places`
+    JOB_UPDATE: (jobId: string) => `${endpointBase}/jobs/${jobId}`,
+    PLACES: `${endpointBase}/places`,
   },
   LINK: {
     SIGN_UP: `/sign-up`,
@@ -20,7 +22,6 @@ export const CONSTANTS = {
     METRICS: `/metrics`,
     PROFILE: `/profile`,
     BOARDS: `/boards`,
-
   },
 };
 
@@ -49,3 +50,23 @@ export const WorkStyle = {
   ON_SITE: "On-site",
   HYBRID: "Hybrid",
 } as const;
+
+export const JobDetailMenu = [
+  { text: "Info", icon: InfoIcon },
+  { text: "Activities", icon: ActivityIcon },
+  { text: "Notes", icon: NoteIcon },
+  { text: "Company", icon: CompanyIcon },
+];
+
+export const settings = [
+  { key: "Profile", value: "Profile" },
+  { key: "Boards", value: "Boards" },
+  { key: "Log out", value: "Log out" },
+];
+
+export const statusOptions = (
+  Object.keys(JobStatus) as Array<keyof typeof JobStatus>
+).map((key) => ({
+  name: key,
+  value: JobStatus[key],
+}));

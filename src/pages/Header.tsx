@@ -6,20 +6,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useCallback, useMemo, useState } from "react";
 import { usePost } from "../common/hooks";
 import { BoardDto } from "../api-interface/board";
-import { CONSTANTS, HeaderMenu } from "../constants";
+import { CONSTANTS, HeaderMenu, settings } from "../constants";
 import { useBoardContext } from "../contexts/board";
 
-const settings = [
-  {
-    key: "Profile",
-    value: "Profile",
-  },
-  {
-    key: "Boards",
-    value: "Boards",
-  },
-  { key: "Log out", value: "Log out" },
-];
 export const Header = () => {
   const { board, setBoard, setBoardStore, boards } = useBoardContext();
   const location = useLocation();
@@ -122,7 +111,7 @@ const HeaderWrapper = styled.div`
   box-shadow: 1px 3px 4px rgba(50, 50, 50, 0.3);
 `;
 
-const StyledIconTextWrapper = styled(HStack)<{ selected: boolean }>`
+export const StyledIconTextWrapper = styled(HStack)<{ selected: boolean }>`
   position: relative;
   padding: 6px 8px;
   border-radius: 8px;

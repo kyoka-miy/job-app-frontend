@@ -7,3 +7,7 @@ export * from "./SettingIcon";
 export * from "./ArrowIcon";
 export * from "./CheckIcon";
 export * from "./PlusIcon";
+export * from "./InfoIcon";
+export * from "./ActivityIcon";
+export * from "./InfoIcon";
+export * from "./CompanyIcon";
