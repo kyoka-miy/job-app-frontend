@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants";
 import { useBoardContext } from "../../contexts/board";
 
-type Method = "POST" | "PUT";
+type Method = "POST" | "PUT" | "DELETE";
 
 type Props = {
   url: string;

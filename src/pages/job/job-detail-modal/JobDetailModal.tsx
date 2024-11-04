@@ -28,6 +28,7 @@ import { debounce } from "lodash";
 import { ValidationUtil } from "../../../common/utils/validation";
 import { format } from "date-fns";
 import { useJob } from "../../../common/hooks/useJob";
+import styled from "styled-components";
 
 type Props = {
   onClose: () => void;
@@ -35,6 +36,7 @@ type Props = {
 };
 export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
   const [selectedMenu, setSelectedMenu] = useState<string>("Info");
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const {
     jobData,
     handleInputChange,
@@ -45,19 +47,21 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
     handleCheckBoxChange,
     setShowSuggestions,
     updateJob,
+    deleteJob,
+    errorMessage,
   } = useJob({ initJobData: selectedJob });
 
   // stop place call when the location is same..
   return (
     <Modal width="85%" innerWidth="85%" onClose={onClose}>
-      <VStack gap={30}>
+      <VStack gap={24}>
         <VStack gap={12}>
           <MediumText bold>{selectedJob.companyName}</MediumText>
           <MediumText color={colors.grayText}>
             {selectedJob.jobTitle}
           </MediumText>
         </VStack>
-        <HStack gap={12}>
+        <HStackWithBorder gap={12}>
           {JobDetailMenu.map((v) => (
             <StyledIconTextWrapper
               align="center"
@@ -70,14 +74,24 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
               <SmallText color={colors.grayText}>{v.text}</SmallText>
             </StyledIconTextWrapper>
           ))}
-        </HStack>
+        </HStackWithBorder>
+        {errorMessage && (
+          <SmallText color={colors.purple3}>{errorMessage}</SmallText>
+        )}
         {selectedMenu === "Info" && (
-          <VStack gap={20}>
+          <VStackWithBorder gap={20}>
             <HStack justify="flex-end" gap={12}>
-              {selectedJob !== jobData && (
-                <Button onClick={() => updateJob(jobData)}>Save</Button>
-              )}
-              <Button type="secondary">Delete</Button>
+              {selectedJob !== jobData &&
+                ValidationUtil.require(jobData.companyName) &&
+                ValidationUtil.require(jobData.jobTitle) && (
+                  <Button onClick={() => updateJob(jobData)}>Save</Button>
+                )}
+              <Button
+                type="secondary"
+                onClick={() => setShowConfirmModal(true)}
+              >
+                Delete
+              </Button>
             </HStack>
             <HStack gap={12}>
               <TextInput
@@ -159,9 +173,34 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
                 )
               )}
             </HStack>
-          </VStack>
+          </VStackWithBorder>
+        )}
+        {showConfirmModal && (
+          <Modal onClose={() => setShowConfirmModal(false)}>
+            <VStack align="center" gap={40}>
+              <MediumText>Are you sure to delete this job?</MediumText>
+              <HStack gap={30}>
+                <Button onClick={() => setShowConfirmModal(false)}>
+                  Cancel
+                </Button>
+                <Button type="secondary" onClick={() => deleteJob()}>
+                  Yes, Delete
+                </Button>
+              </HStack>
+            </VStack>
+          </Modal>
         )}
       </VStack>
     </Modal>
   );
 };
+
+const VStackWithBorder = styled(VStack)`
+  padding-bottom: 24px;
+  border-bottom: 1px solid ${colors.foggyGray};
+`;
+
+const HStackWithBorder = styled(HStack)`
+  padding-bottom: 10px;
+  border-bottom: 1px solid ${colors.foggyGray};
+`;

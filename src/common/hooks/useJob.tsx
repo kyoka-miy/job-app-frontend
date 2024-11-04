@@ -34,9 +34,15 @@ export const useJob = ({ initJobData }: Props) => {
     onSuccess: () => window.location.reload(),
     onError: (err) => setErrorMessage(err),
   });
-  const { doPost: updateJob, isLoading: updateJobLoading } = usePost({
+  const { doPost: updateJob } = usePost({
     url: CONSTANTS.ENDPOINT.JOB_UPDATE(initJobData?.jobId || ""),
     method: "PUT",
+    onSuccess: () => window.location.reload(),
+    onError: (err) => setErrorMessage(err),
+  });
+  const { doPost: deleteJob } = usePost({
+    url: CONSTANTS.ENDPOINT.JOB_UPDATE(initJobData?.jobId || ""),
+    method: "DELETE",
     onSuccess: () => window.location.reload(),
     onError: (err) => setErrorMessage(err),
   });
@@ -122,5 +128,7 @@ export const useJob = ({ initJobData }: Props) => {
     handleLocationChange,
     handleCheckBoxChange,
     updateJob,
+    deleteJob,
+    errorMessage
   };
 };
