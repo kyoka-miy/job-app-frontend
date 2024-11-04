@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   CheckBox,
@@ -10,112 +9,34 @@ import {
   TextInput,
   VStack,
 } from "../../common";
-import { AddOrUpdateJobRequest } from "../../api-interface/job";
-import { useFetch, usePost } from "../../common/hooks";
-import { CONSTANTS, JobStatus, statusOptions, WorkStyle } from "../../constants";
+import {
+  JobStatus,
+  statusOptions,
+  WorkStyle,
+} from "../../constants";
 import { ValidationUtil } from "../../common/utils/validation";
 import { format } from "date-fns";
 import { colors } from "../../common/styles";
-import { PlaceSuggestionDto } from "../../api-interface/placeSuggestion";
-import { debounce } from "lodash";
 import styled from "styled-components";
+import { useJob } from "../../common/hooks/useJob";
 
 type Props = {
   onClose: () => void;
 };
 
 export const AddJobModal: React.FC<Props> = ({ onClose }) => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [jobData, setJobData] = useState<AddOrUpdateJobRequest>({
-    companyName: "",
-    jobTitle: "",
-    appliedDate: undefined,
-    url: "",
-    location: "",
-    placeId: "",
-    salary: "",
-    jobBoard: "",
-    status: "APPLIED",
-    workStyle: undefined,
-    note: "",
-  });
-  const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-  
-  const { doPost: addJob, isLoading } = usePost({
-    url: CONSTANTS.ENDPOINT.JOBS,
-    onSuccess: () => window.location.reload(),
-    onError: (err) => setErrorMessage(err),
-  });
-  const { data: placeSuggestions, refetch } = useFetch<PlaceSuggestionDto[]>({
-    url: CONSTANTS.ENDPOINT.PLACES,
-    params: { input: jobData.location },
-  });
-
-  const debouncedFetchSuggestions = useCallback(
-    debounce(() => refetch(), 500),
-    [refetch]
-  );
-
-  useEffect(() => {
-    debouncedFetchSuggestions();
-    return () => debouncedFetchSuggestions.cancel();
-  }, [jobData.location]);
-
-  const placeSuggestionOptions = useMemo(
-    () =>
-      placeSuggestions?.map((v) => ({
-        key: v.placeId,
-        value: v.description,
-      })) || [],
-    [placeSuggestions]
-  );
-
-  const handleInputChange = useCallback(
-    (value: string, key: keyof AddOrUpdateJobRequest) => {
-      if (key === "appliedDate") {
-        setJobData((prev) => ({
-          ...prev,
-          [key]: new Date(value),
-        }));
-      } else
-        setJobData((prev) => ({
-          ...prev,
-          [key]: value,
-        }));
-      if (key === "location")
-        setShowSuggestions(value.length > 0);
-    },
-    [setJobData]
-  );
-  const handleLocationChange = useCallback(
-    (key: string) => {
-      const description = placeSuggestionOptions.find(
-        (v) => v.key === key
-      )?.value;
-      setJobData((prev) => ({
-        ...prev,
-        location: description,
-        placeId: key,
-      }));
-      setShowSuggestions(false);
-    },
-    [placeSuggestionOptions]
-  );
-  const handleCheckBoxChange = useCallback(
-    (key: keyof typeof WorkStyle) => {
-      if (jobData.workStyle === key)
-        setJobData((prev) => ({
-          ...prev,
-          workStyle: undefined,
-        }));
-      else
-        setJobData((prev) => ({
-          ...prev,
-          workStyle: key,
-        }));
-    },
-    [setJobData, jobData.workStyle]
-  );
+  const {
+    jobData,
+    handleInputChange,
+    showSuggestions,
+    placeSuggestions,
+    placeSuggestionOptions,
+    handleLocationChange,
+    handleCheckBoxChange,
+    setShowSuggestions,
+    addJob,
+    errorMessage,
+  } = useJob();
 
   return (
     <Modal onClose={() => onClose()}>
@@ -222,7 +143,6 @@ export const AddJobModal: React.FC<Props> = ({ onClose }) => {
             !(jobData.companyName.length > 0 && jobData.jobTitle.length > 0)
           }
           width="100%"
-          loading={isLoading}
           bold
           plusIcon
         >

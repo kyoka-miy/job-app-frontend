@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import {
   MediumText,
   Modal,
@@ -13,7 +13,6 @@ import {
 } from "../../../common";
 import { colors } from "../../../common/styles";
 import {
-  CONSTANTS,
   JobDetailMenu,
   JobStatus,
   statusOptions,
@@ -21,13 +20,10 @@ import {
 } from "../../../constants";
 import { StyledIconTextWrapper } from "../../Header";
 import { StyledWrapper } from "../AddJobModal";
-import { AddOrUpdateJobRequest, IJob } from "../../../api-interface/job";
-import { PlaceSuggestionDto } from "../../../api-interface/placeSuggestion";
-import { useFetch } from "../../../common/hooks";
-import { debounce } from "lodash";
+import { IJob } from "../../../api-interface/job";
 import { ValidationUtil } from "../../../common/utils/validation";
 import { format } from "date-fns";
-import { useJob } from "../../../common/hooks/useJob";
+import { useJob } from "../../../common/hooks";
 import styled from "styled-components";
 
 type Props = {
