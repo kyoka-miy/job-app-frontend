@@ -1,4 +1,14 @@
-import { ActivityIcon, CalendarIcon, CompanyIcon, InfoIcon, JobIcon, MapIcon, MetricsIcon } from "./common/icons";
+import {
+  ActivityIcon,
+  AssignmentIcon,
+  CalendarIcon,
+  CompanyIcon,
+  FaceIcon,
+  InfoIcon,
+  JobIcon,
+  MapIcon,
+  MetricsIcon,
+} from "./common/icons";
 import { NoteIcon } from "./common/icons/NoteIcon";
 
 const endpointBase = process.env.REACT_APP_ENDPOINT_BASE;
@@ -39,6 +49,7 @@ export const HeaderMenu: HeaderMenuType[] = [
 ];
 
 export const JobStatus = {
+  REJECTED: "Rejected",
   WISHLIST: "Wishlist",
   APPLIED: "Applied",
   INTERVIEW: "Interview",
@@ -53,6 +64,8 @@ export const WorkStyle = {
 
 export const JobDetailMenu = [
   { text: "Info", icon: InfoIcon },
+  { text: "Assignments", icon: AssignmentIcon },
+  { text: "Interviews", icon: FaceIcon },
   { text: "Activities", icon: ActivityIcon },
   { text: "Notes", icon: NoteIcon },
   { text: "Company", icon: CompanyIcon },

@@ -51,12 +51,17 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
   return (
     <Modal width="85%" innerWidth="85%" onClose={onClose}>
       <VStack gap={24}>
-        <VStack gap={12}>
-          <MediumText bold>{selectedJob.companyName}</MediumText>
-          <MediumText color={colors.grayText}>
-            {selectedJob.jobTitle}
-          </MediumText>
-        </VStack>
+        <HStack gap={12}>
+          <VStack gap={8}>
+            <MediumText bold>{selectedJob.companyName}</MediumText>
+            <MediumText color={colors.grayText}>
+              {selectedJob.jobTitle}
+            </MediumText>
+          </VStack>
+          <Button type="secondary" onClick={() => setShowConfirmModal(true)}>
+            Delete
+          </Button>
+        </HStack>
         <HStackWithBorder gap={12}>
           {JobDetailMenu.map((v) => (
             <StyledIconTextWrapper
@@ -75,19 +80,13 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
           <SmallText color={colors.purple3}>{errorMessage}</SmallText>
         )}
         {selectedMenu === "Info" && (
-          <VStackWithBorder gap={20}>
-            <HStack justify="flex-end" gap={12}>
+          <VStack gap={18}>
+            <HStack justify="flex-end">
               {selectedJob !== jobData &&
                 ValidationUtil.require(jobData.companyName) &&
                 ValidationUtil.require(jobData.jobTitle) && (
                   <Button onClick={() => updateJob(jobData)}>Save</Button>
                 )}
-              <Button
-                type="secondary"
-                onClick={() => setShowConfirmModal(true)}
-              >
-                Delete
-              </Button>
             </HStack>
             <HStack gap={12}>
               <TextInput
@@ -169,7 +168,7 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
                 )
               )}
             </HStack>
-          </VStackWithBorder>
+          </VStack>
         )}
         {showConfirmModal && (
           <Modal onClose={() => setShowConfirmModal(false)}>
@@ -190,11 +189,6 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
     </Modal>
   );
 };
-
-const VStackWithBorder = styled(VStack)`
-  padding-bottom: 24px;
-  border-bottom: 1px solid ${colors.foggyGray};
-`;
 
 const HStackWithBorder = styled(HStack)`
   padding-bottom: 10px;

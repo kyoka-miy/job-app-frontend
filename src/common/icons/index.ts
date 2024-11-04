@@ -11,3 +11,5 @@ export * from "./InfoIcon";
 export * from "./ActivityIcon";
 export * from "./InfoIcon";
 export * from "./CompanyIcon";
+export * from "./AssignmentIcon";
+export * from "./FaceIcon";

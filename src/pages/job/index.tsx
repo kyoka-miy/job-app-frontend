@@ -148,7 +148,7 @@ export const Job = () => {
                 <Tab onClick={() => setStatus(v)} selected={status === v}>
                   {JobStatus[v]}
                 </Tab>
-                {v !== "OFFER" && <ArrowIcon />}
+                {v !== "OFFER" && v !== "REJECTED" && <ArrowIcon />}
               </HStack>
             )
           )}
@@ -180,7 +180,12 @@ export const Job = () => {
       {showAddJobModal && (
         <AddJobModal onClose={() => setShowAddJobModal(false)} />
       )}
-      {selectedJob && <JobDetailModal onClose={() => setSelectedJob(null)} selectedJob={selectedJob}/>}
+      {selectedJob && (
+        <JobDetailModal
+          onClose={() => setSelectedJob(null)}
+          selectedJob={selectedJob}
+        />
+      )}
     </VStack>
   );
 };

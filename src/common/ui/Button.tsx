@@ -5,7 +5,7 @@ import { PlusIcon } from "../icons";
 import { SmallText } from "./Text";
 import { HStack } from "..";
 
-type ButtonType = "primary" | "secondary";
+type ButtonType = "primary" | "secondary" | "third";
 
 type Props = {
   width?: number | string;
@@ -77,24 +77,40 @@ const StyledButton = styled.button<{
         background-color: ${!props.disabled && colors.purple7};
       }
       &:active {
-        background-color: ${!props.disabled && colors.purple2}; /* Change color on click */
+        background-color: ${!props.disabled &&
+        colors.purple2}; /* Change color on click */
       }
     `}
 
     ${(props) =>
-      props.buttonType === "secondary" &&
-      css`
-        background-color: ${colors.white};
-        color: ${colors.purple1};
-        border: 1px solid ${colors.purple1};
-  
-        &:hover {
-          background-color: ${!props.disabled && colors.purple6};
-        }
-        &:active {
-          background-color: ${!props.disabled && colors.purple5};
-        }
-      `}
+    props.buttonType === "secondary" &&
+    css`
+      background-color: ${colors.white};
+      color: ${colors.purple1};
+      border: 1px solid ${colors.purple1};
+
+      &:hover {
+        background-color: ${!props.disabled && colors.purple6};
+      }
+      &:active {
+        background-color: ${!props.disabled && colors.purple5};
+      }
+    `}
+
+      ${(props) =>
+    props.buttonType === "third" &&
+    css`
+      background-color: ${colors.neutralGray1};
+      color: ${colors.grayText};
+      border: 1px solid ${colors.grayText};
+
+      &:hover {
+        background-color: ${!props.disabled && colors.softSilver};
+      }
+      &:active {
+        background-color: ${!props.disabled && colors.foggyGray};
+      }
+    `}
 
   ${(props) =>
     props.disabled &&
