@@ -10,6 +10,7 @@ import {
   MetricsIcon,
 } from "./common/icons";
 import { NoteIcon } from "./common/icons/NoteIcon";
+import { colors } from "./common/styles";
 
 const endpointBase = process.env.REACT_APP_ENDPOINT_BASE;
 export const CONSTANTS = {
@@ -83,3 +84,62 @@ export const statusOptions = (
   name: key,
   value: JobStatus[key],
 }));
+
+interface InterviewTag {
+  text: string;
+  color: string;
+  backgroundColor: string;
+}
+
+export const InterviewTags: Record<string, InterviewTag> = {
+  PHONE_SCREEN: {
+    text: "Phone Screen",
+    color: colors.purple1,
+    backgroundColor: colors.purple3,
+  },
+  FIRST_INTERVIEW: {
+    text: "First Interview",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+  SECOND_INTERVIEW: {
+    text: "Second Interview",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+  THIRD_INTERVIEW: {
+    text: "Third Interview",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+  FINAL_INTERVIEW: {
+    text: "Final Interview",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+  LEETCODE: {
+    text: "Leetcode",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+  LIVE_CODING: {
+    text: "Live Coding",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+  TECH_INTERVIEW: {
+    text: "Tech Interview",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+  HOMEWORK: {
+    text: "Homework",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+  HR_INTERVIEW: {
+    text: "HR Interview",
+    color: colors.deepSlate,
+    backgroundColor: colors.coolCharcoal,
+  },
+};

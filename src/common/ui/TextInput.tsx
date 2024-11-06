@@ -10,7 +10,7 @@ type Props = {
   value?: string;
   onChange?: (v: any) => void;
   disabled?: boolean;
-  width?: number;
+  width?: number | string;
   height?: number;
   type?: string;
   validate?: (v: any) => boolean;
@@ -28,6 +28,7 @@ export const TextInput: React.FC<Props> = ({
   errorMessage = "",
   title,
   required = false,
+  width = "100%",
   ...props
 }) => {
   const [isTouched, setIsTouched] = useState(false);
@@ -60,6 +61,7 @@ export const TextInput: React.FC<Props> = ({
           }}
           value={value}
           isValid={isValid}
+          width={width}
           {...props}
         />
       ) : (
@@ -73,6 +75,7 @@ export const TextInput: React.FC<Props> = ({
           }}
           value={value}
           isValid={isValid}
+          width={width}
           {...props}
         />
       )}
@@ -87,11 +90,11 @@ export const TextInput: React.FC<Props> = ({
 
 const StyledInput = styled.input<{
   hasError: boolean;
-  width?: number;
+  width: number | string;
   height?: number;
   isValid: boolean;
 }>`
-  width: ${(p) => (p.width ? `${p.width}px` : "100%")};
+  width: ${(p) => (typeof p.width === "number" ? `${p.width}px` : p.width)};
   height: ${(p) => (p.height ? `${p.height}px` : "fit-content")};
   padding: 12px;
   border: 1px solid
@@ -138,11 +141,12 @@ const StyledSpan = styled.span`
 
 const StyledTextArea = styled.textarea<{
   hasError: boolean;
-  width?: number;
+  width: number | string;
   height?: number;
   isValid: boolean;
 }>`
-  width: ${(p) => (p.width ? `${p.width}px` : "100%")} !important;
+  width: ${(p) =>
+    typeof p.width === "number" ? `${p.width}px` : p.width} !important;
   height: ${(p) => (p.height ? `${p.height}px` : "fit-content")} !important;
   outline: none;
   padding: 12px;
@@ -154,7 +158,7 @@ const StyledTextArea = styled.textarea<{
   background-color: ${(props) =>
     props.disabled ? colors.softSilver : "transparent"};
   resize: none;
-  
+
   &:focus {
     border-color: ${(props) =>
       props.hasError || !props.isValid ? colors.purple3 : colors.purple2};

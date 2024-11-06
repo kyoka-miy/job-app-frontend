@@ -9,8 +9,6 @@ import {
   CheckBox,
   SmallText,
   HoverMenu,
-  Modal,
-  MediumText,
 } from "../../../common";
 import { useJob } from "../../../common/hooks";
 import { colors } from "../../../common/styles";
@@ -20,14 +18,9 @@ import { StyledWrapper } from "../AddJobModal";
 
 type Props = {
   selectedJob: IJob;
-  showConfirmModal: boolean;
-  setShowConfirmModal: (v: boolean) => void;
 };
-export const Info = ({
-  selectedJob,
-  showConfirmModal,
-  setShowConfirmModal,
-}: Props) => {
+
+export const Info = ({ selectedJob }: Props) => {
   const {
     jobData,
     handleInputChange,
@@ -38,9 +31,9 @@ export const Info = ({
     handleCheckBoxChange,
     setShowSuggestions,
     updateJob,
-    deleteJob,
     errorMessage,
   } = useJob({ initJobData: selectedJob });
+
   return (
     <VStack gap={18}>
       {errorMessage && (
@@ -50,7 +43,9 @@ export const Info = ({
         {selectedJob !== jobData &&
           ValidationUtil.require(jobData.companyName) &&
           ValidationUtil.require(jobData.jobTitle) && (
-            <Button onClick={() => updateJob(jobData)}>Save</Button>
+            <Button onClick={() => updateJob(jobData)} bold>
+              Save
+            </Button>
           )}
       </HStack>
       <HStack gap={12}>
@@ -133,19 +128,6 @@ export const Info = ({
           )
         )}
       </HStack>
-      {showConfirmModal && (
-        <Modal onClose={() => setShowConfirmModal(false)}>
-          <VStack align="center" gap={40}>
-            <MediumText>Are you sure to delete this job?</MediumText>
-            <HStack gap={30}>
-              <Button onClick={() => setShowConfirmModal(false)}>Cancel</Button>
-              <Button type="secondary" onClick={() => deleteJob()}>
-                Yes, Delete
-              </Button>
-            </HStack>
-          </VStack>
-        </Modal>
-      )}
     </VStack>
   );
 };

@@ -64,7 +64,7 @@ export const usePost = ({ url, method = "POST", onSuccess, onError }: Props) => 
         setIsLoading(false);
       }
     },
-    [url, onSuccess, onError, headers, navigate]
+    [url, onSuccess, onError, headers, navigate, method]
   );
   return { doPost, isLoading };
 };

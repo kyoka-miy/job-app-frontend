@@ -15,6 +15,7 @@ import styled from "styled-components";
 import { Info } from "./Info";
 import { Assignments } from "./Assignments";
 import { Interviews } from "./Interviews";
+import { useJob } from "../../../common/hooks";
 
 type Props = {
   onClose: () => void;
@@ -23,6 +24,7 @@ type Props = {
 export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
   const [selectedMenu, setSelectedMenu] = useState<string>("Info");
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const { deleteJob } = useJob({ initJobData: selectedJob });
 
   return (
     <Modal width="85%" innerWidth="85%" onClose={onClose}>
@@ -52,16 +54,23 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
             </StyledIconTextWrapper>
           ))}
         </HStackWithBorder>
-        {selectedMenu === "Info" && (
-          <Info
-            selectedJob={selectedJob}
-            showConfirmModal={showConfirmModal}
-            setShowConfirmModal={setShowConfirmModal}
-          />
-        )}
+        {selectedMenu === "Info" && <Info selectedJob={selectedJob} />}
         {selectedMenu === "Assignments" && <Assignments />}
         {selectedMenu === "Interviews" && <Interviews />}
       </VStack>
+      {showConfirmModal && (
+        <Modal onClose={() => setShowConfirmModal(false)}>
+          <VStack align="center" gap={40}>
+            <MediumText>Are you sure to delete this job?</MediumText>
+            <HStack gap={30}>
+              <Button onClick={() => setShowConfirmModal(false)}>Cancel</Button>
+              <Button type="secondary" onClick={() => deleteJob()}>
+                Yes, Delete
+              </Button>
+            </HStack>
+          </VStack>
+        </Modal>
+      )}
     </Modal>
   );
 };

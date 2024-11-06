@@ -30,6 +30,7 @@ export const useJob = ({ initJobData }: Props = {}) => {
   );
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
+  // job add, update, delete api requests
   const { doPost: addJob } = usePost({
     url: CONSTANTS.ENDPOINT.JOBS,
     onSuccess: () => window.location.reload(),
@@ -47,6 +48,7 @@ export const useJob = ({ initJobData }: Props = {}) => {
     onSuccess: () => window.location.reload(),
     onError: (err) => setErrorMessage(err),
   });
+
   // request for place api to get place suggestions
   const { data: placeSuggestions, refetch: suggestionRefetch } = useFetch<
     PlaceSuggestionDto[]
@@ -74,6 +76,7 @@ export const useJob = ({ initJobData }: Props = {}) => {
       })) || [],
     [placeSuggestions]
   );
+  
   // when the user clicked location from place suggestions
   const handleLocationChange = useCallback(
     (key: string) => {

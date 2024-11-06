@@ -4,7 +4,7 @@ export const Assignments = () => {
   return (
     <VStack>
       <HStack justify="flex-end">
-        <Button plusIcon>Add</Button>
+        <Button plusIcon bold>Add</Button>
       </HStack>
     </VStack>
   );
