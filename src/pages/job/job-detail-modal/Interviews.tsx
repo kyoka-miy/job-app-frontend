@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import styled from "styled-components";
 import {
   Button,
@@ -8,11 +9,52 @@ import {
   VStack,
 } from "../../../common";
 import { colors } from "../../../common/styles";
-import { useState } from "react";
 import { InterviewTags } from "../../../constants";
+import { AddOrUpdateInterviewRequest } from "../../../api-interface/Interview";
+import { format } from "date-fns";
 
 export const Interviews = () => {
   const [showAddPanel, setShowAddPanel] = useState<boolean>(false);
+  const [interviewData, setInterviewData] =
+    useState<AddOrUpdateInterviewRequest>({
+      title: "",
+      tags: [],
+      interviewDatetime: new Date(),
+      note: "",
+      completed: false,
+    });
+  const handleInputChange = useCallback(
+    (value: string, key: keyof AddOrUpdateInterviewRequest) => {
+      if (key === "tags") {
+        setInterviewData((prev) => {
+          if (prev.tags?.includes(value))
+            return {
+              ...prev,
+              [key]: prev.tags.filter((v) => v !== value),
+            };
+          else
+            return {
+              ...prev,
+              [key]: [...prev.tags, value],
+            };
+        });
+      } else
+        setInterviewData((prev) => ({
+          ...prev,
+          [key]: value,
+        }));
+    },
+    [setInterviewData]
+  );
+  const handleCheckBoxChange = useCallback(
+    () =>
+      setInterviewData((prev) => ({
+        ...prev,
+        completed: !prev.completed,
+      })),
+    [setInterviewData]
+  );
+
   return (
     <VStack gap={18}>
       <HStack justify="flex-end">
@@ -23,7 +65,13 @@ export const Interviews = () => {
       {showAddPanel && (
         <InterviewWrapper>
           <VStack gap={14}>
-            <TextInput title="Title" required width="50%" />
+            <TextInput
+              title="Title"
+              required
+              width="50%"
+              value={interviewData.title}
+              onChange={(v) => handleInputChange(v, "title")}
+            />
             <SmallText>Select Tags</SmallText>
             <TagContainer gap={12}>
               {Object.keys(InterviewTags).map((key) => (
@@ -31,22 +79,36 @@ export const Interviews = () => {
                   key={key}
                   color={InterviewTags[key].color}
                   backgroundColor={InterviewTags[key].backgroundColor}
+                  selected={interviewData.tags?.includes(key) || false}
+                  onClick={() => handleInputChange(key, "tags")}
                 >
                   <TagText
                     hoveredColor={InterviewTags[key].color}
                     color={colors.grayText}
+                    selected={interviewData.tags?.includes(key) || false}
                   >
                     {InterviewTags[key].text}
                   </TagText>
                 </TagWrapper>
               ))}
             </TagContainer>
-            <TextInput title="Date" type="date" required />
-            <TextInput title="Note" type="textarea" />
+            <TextInput
+              title="Date"
+              type="date"
+              required
+              value={format(interviewData.interviewDatetime, "yyyy-MM-dd")}
+              onChange={(v) => handleInputChange(v, "interviewDatetime")}
+            />
+            <TextInput
+              title="Note"
+              type="textarea"
+              value={interviewData.note}
+              onChange={(v) => handleInputChange(v, "note")}
+            />
             <CheckBox
               value="Mark as Completed"
-              onChange={() => {}}
-              checked={false}
+              onChange={() => handleCheckBoxChange()}
+              checked={interviewData.completed}
             />
             <HStack gap={8} justify="flex-end">
               <Button>Create</Button>
@@ -72,7 +134,11 @@ const TagContainer = styled(HStack)`
   flex-wrap: wrap;
   width: 60%;
 `;
-const TagWrapper = styled.div<{ color: string; backgroundColor: string }>`
+const TagWrapper = styled.div<{
+  color: string;
+  backgroundColor: string;
+  selected: boolean;
+}>`
   border-radius: 100px;
   padding: 6px 12px;
   border: 1px solid ${colors.grayText};
@@ -83,9 +149,13 @@ const TagWrapper = styled.div<{ color: string; backgroundColor: string }>`
     background: ${(p) => p.backgroundColor};
     border-color: ${(p) => p.color};
   }
+
+  ${(p) =>
+    p.selected && `background: ${p.backgroundColor}; border-color: ${p.color};`}
 `;
-const TagText = styled(SmallText)<{ hoveredColor: string }>`
+const TagText = styled(SmallText)<{ hoveredColor: string; selected: boolean }>`
   ${TagWrapper}:hover & {
     color: ${(p) => p.hoveredColor};
   }
+  ${(p) => p.selected && `color: ${p.hoveredColor};`}
 `;

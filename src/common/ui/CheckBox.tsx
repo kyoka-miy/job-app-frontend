@@ -6,22 +6,24 @@ import { HStack } from "./Stack";
 
 type Props = {
   value: string;
-  errorMessage?: string;
   checked: boolean;
   onChange: (v: any) => void;
 };
 
 export const CheckBox: React.FC<Props> = ({
   value,
-  errorMessage,
   checked = false,
   onChange,
 }) => {
   return (
     <StyledLabel>
-      <StyledInput type="checkbox" checked={checked} onChange={() => onChange(value)}/>
+      <StyledInput
+        type="checkbox"
+        checked={checked}
+        onChange={() => onChange(value)}
+      />
       <HStack gap={8}>
-        <StyledCheckBox checked={checked} >
+        <StyledCheckBox checked={checked}>
           <StyledCheckIcon checked={checked} />
         </StyledCheckBox>
         <SmallText>{value}</SmallText>
@@ -33,6 +35,7 @@ export const CheckBox: React.FC<Props> = ({
 const StyledLabel = styled.label`
   cursor: pointer;
   align-items: center;
+  width: fit-content;
 `;
 const StyledInput = styled.input`
   display: none;
