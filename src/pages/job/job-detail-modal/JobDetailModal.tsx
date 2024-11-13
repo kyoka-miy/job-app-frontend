@@ -56,7 +56,7 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
         </HStackWithBorder>
         {selectedMenu === "Info" && <Info selectedJob={selectedJob} />}
         {selectedMenu === "Assignments" && <Assignments />}
-        {selectedMenu === "Interviews" && <Interviews />}
+        {selectedMenu === "Interviews" && <Interviews selectedJob={selectedJob}/>}
       </VStack>
       {showConfirmModal && (
         <Modal onClose={() => setShowConfirmModal(false)}>

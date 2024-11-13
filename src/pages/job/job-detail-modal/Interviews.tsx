@@ -9,20 +9,37 @@ import {
   VStack,
 } from "../../../common";
 import { colors } from "../../../common/styles";
-import { InterviewTags } from "../../../constants";
+import { CONSTANTS, InterviewTags } from "../../../constants";
 import { AddOrUpdateInterviewRequest } from "../../../api-interface/Interview";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
+import { usePost } from "../../../common/hooks";
+import { IJob } from "../../../api-interface/job";
+import { ValidationUtil } from "../../../common/utils/validation";
 
-export const Interviews = () => {
+type Props = {
+  selectedJob: IJob;
+};
+export const Interviews = ({ selectedJob }: Props) => {
   const [showAddPanel, setShowAddPanel] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [interviewData, setInterviewData] =
     useState<AddOrUpdateInterviewRequest>({
       title: "",
-      tags: [],
+      tags: undefined,
       interviewDatetime: new Date(),
       note: "",
       completed: false,
     });
+
+  const { doPost } = usePost({
+    url: CONSTANTS.ENDPOINT.INTERVIEWS_JOB(selectedJob.jobId),
+    onSuccess: () => {
+      setShowAddPanel(false);
+    },
+    onError: (err) => {
+      setErrorMessage(err);
+    },
+  });
   const handleInputChange = useCallback(
     (value: string, key: keyof AddOrUpdateInterviewRequest) => {
       if (key === "tags") {
@@ -35,7 +52,7 @@ export const Interviews = () => {
           else
             return {
               ...prev,
-              [key]: [...prev.tags, value],
+              [key]: [...(prev.tags || []), value],
             };
         });
       } else
@@ -54,6 +71,53 @@ export const Interviews = () => {
       })),
     [setInterviewData]
   );
+  const handleDateChange = useCallback(
+    (date: string) => {
+      let newDatetime = new Date();
+      if (
+        interviewData.interviewDatetime instanceof Date &&
+        !isNaN(interviewData.interviewDatetime.getTime())
+      ) {
+        const time = format(interviewData.interviewDatetime, "HH:mm");
+        newDatetime = parse(
+          `${date}T${time}`,
+          "yyyy-MM-dd'T'HH:mm",
+          new Date()
+        );
+      } else {
+        const time = format(newDatetime, "HH:mm");
+        newDatetime = parse(
+          `${date}T${time}`,
+          "yyyy-MM-dd'T'HH:mm",
+          new Date()
+        );
+      }
+      setInterviewData((prev) => ({
+        ...prev,
+        interviewDatetime: newDatetime,
+      }));
+    },
+    [interviewData.interviewDatetime]
+  );
+  const handleTimeChange = useCallback(
+    (time: string) => {
+      const date =
+        interviewData.interviewDatetime instanceof Date &&
+        !isNaN(interviewData.interviewDatetime.getTime())
+          ? format(interviewData.interviewDatetime, "yyyy-MM-dd")
+          : "";
+      const newDatetime = parse(
+        `${date}T${time}`,
+        "yyyy-MM-dd'T'HH:mm",
+        new Date()
+      );
+      setInterviewData((prev) => ({
+        ...prev,
+        interviewDatetime: newDatetime,
+      }));
+    },
+    [interviewData.interviewDatetime]
+  );
 
   return (
     <VStack gap={18}>
@@ -71,6 +135,7 @@ export const Interviews = () => {
               width="50%"
               value={interviewData.title}
               onChange={(v) => handleInputChange(v, "title")}
+              validate={(v) => ValidationUtil.require(v)}
             />
             <SmallText>Select Tags</SmallText>
             <TagContainer gap={12}>
@@ -92,13 +157,34 @@ export const Interviews = () => {
                 </TagWrapper>
               ))}
             </TagContainer>
-            <TextInput
-              title="Date"
-              type="date"
-              required
-              value={format(interviewData.interviewDatetime, "yyyy-MM-dd")}
-              onChange={(v) => handleInputChange(v, "interviewDatetime")}
-            />
+            <HStack gap={12} width="50%">
+              <TextInput
+                title="Date"
+                type="date"
+                required
+                value={
+                  interviewData.interviewDatetime instanceof Date &&
+                  !isNaN(interviewData.interviewDatetime.getTime())
+                    ? format(interviewData.interviewDatetime, "yyyy-MM-dd")
+                    : ""
+                }
+                onChange={(v) => handleDateChange(v)}
+                validate={(v) => ValidationUtil.require(v)}
+              />
+              <TextInput
+                title="Time"
+                type="time"
+                required
+                value={
+                  interviewData.interviewDatetime instanceof Date &&
+                  !isNaN(interviewData.interviewDatetime.getTime())
+                    ? format(interviewData.interviewDatetime, "HH:mm")
+                    : ""
+                }
+                onChange={(v) => handleTimeChange(v)}
+                validate={(v) => ValidationUtil.require(v)}
+              />
+            </HStack>
             <TextInput
               title="Note"
               type="textarea"
@@ -110,8 +196,22 @@ export const Interviews = () => {
               onChange={() => handleCheckBoxChange()}
               checked={interviewData.completed}
             />
+            {errorMessage && (
+              <SmallText color={colors.purple3}>{errorMessage}</SmallText>
+            )}
             <HStack gap={8} justify="flex-end">
-              <Button>Create</Button>
+              <Button
+                onClick={() => doPost(interviewData)}
+                disabled={
+                  !(
+                    ValidationUtil.require(interviewData.title) &&
+                    interviewData.interviewDatetime instanceof Date &&
+                    !isNaN(interviewData.interviewDatetime.getTime())
+                  )
+                }
+              >
+                Create
+              </Button>
               <Button type="secondary" onClick={() => setShowAddPanel(false)}>
                 Cancel
               </Button>
@@ -132,7 +232,7 @@ const InterviewWrapper = styled.div`
 
 const TagContainer = styled(HStack)`
   flex-wrap: wrap;
-  width: 60%;
+  width: 80%;
 `;
 const TagWrapper = styled.div<{
   color: string;
@@ -146,7 +246,6 @@ const TagWrapper = styled.div<{
 
   &:hover {
     cursor: pointer;
-    background: ${(p) => p.backgroundColor};
     border-color: ${(p) => p.color};
   }
 
