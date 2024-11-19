@@ -10,16 +10,16 @@ import {
 import { colors } from "../../../common/styles";
 import { JobDetailMenu } from "../../../constants";
 import { StyledIconTextWrapper } from "../../Header";
-import { IJob } from "../../../api-interface/job";
+import { JobDto } from "../../../api-interface/job";
 import styled from "styled-components";
 import { Info } from "./Info";
 import { Assignments } from "./Assignments";
-import { Interviews } from "./Interviews";
+import { Interviews } from "./interview/Interviews";
 import { useJob } from "../../../common/hooks";
 
 type Props = {
   onClose: () => void;
-  selectedJob: IJob;
+  selectedJob: JobDto;
 };
 export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
   const [selectedMenu, setSelectedMenu] = useState<string>("Info");
@@ -56,7 +56,9 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
         </HStackWithBorder>
         {selectedMenu === "Info" && <Info selectedJob={selectedJob} />}
         {selectedMenu === "Assignments" && <Assignments />}
-        {selectedMenu === "Interviews" && <Interviews selectedJob={selectedJob}/>}
+        {selectedMenu === "Interviews" && (
+          <Interviews selectedJob={selectedJob} />
+        )}
       </VStack>
       {showConfirmModal && (
         <Modal onClose={() => setShowConfirmModal(false)}>

@@ -10,7 +10,6 @@ import {
   MetricsIcon,
 } from "./common/icons";
 import { NoteIcon } from "./common/icons/NoteIcon";
-import { colors } from "./common/styles";
 
 const endpointBase = process.env.REACT_APP_ENDPOINT_BASE;
 export const CONSTANTS = {

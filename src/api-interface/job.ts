@@ -1,6 +1,6 @@
 import { WorkStyle, JobStatus } from "../constants";
 
-export type IJob = {
+export type JobDto = {
   jobId: string;
   jobTitle: string;
   companyName: string;

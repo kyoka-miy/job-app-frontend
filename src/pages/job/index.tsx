@@ -1,19 +1,10 @@
 import styled from "styled-components";
-import {
-  Button,
-  HStack,
-  SmallText,
-  Tab,
-  VStack,
-} from "../../common";
+import { Button, HStack, SmallText, Tab, VStack } from "../../common";
 import { ArrowIcon } from "../../common/icons";
-import {
-  CONSTANTS,
-  JobStatus,
-} from "../../constants";
-import {  useEffect, useState } from "react";
+import { CONSTANTS, JobStatus } from "../../constants";
+import { useEffect, useState } from "react";
 import { AddJobModal } from "./AddJobModal";
-import { IJob } from "../../api-interface/job";
+import { JobDto } from "../../api-interface/job";
 import { useFetch } from "../../common/hooks";
 import { colors } from "../../common/styles";
 import moment from "moment";
@@ -22,9 +13,9 @@ import { JobDetailModal } from "./job-detail-modal/JobDetailModal";
 export const Job = () => {
   const [status, setStatus] = useState<keyof typeof JobStatus>("WISHLIST");
   const [showAddJobModal, setShowAddJobModal] = useState<boolean>(false);
-  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
+  const [selectedJob, setSelectedJob] = useState<JobDto | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const { data, refetch } = useFetch<IJob[]>({
+  const { data, refetch } = useFetch<JobDto[]>({
     url: CONSTANTS.ENDPOINT.JOBS,
     params: {
       status: status,

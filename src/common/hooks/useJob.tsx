@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AddOrUpdateJobRequest, IJob } from "../../api-interface/job";
+import { AddOrUpdateJobRequest, JobDto } from "../../api-interface/job";
 import { useFetch, usePost } from ".";
 import { PlaceSuggestionDto } from "../../api-interface/placeSuggestion";
 import { CONSTANTS, WorkStyle } from "../../constants";
 import { debounce } from "lodash";
 
 type Props = {
-  initJobData?: IJob;
+  initJobData?: JobDto;
 };
 
 export const useJob = ({ initJobData }: Props = {}) => {
@@ -76,7 +76,7 @@ export const useJob = ({ initJobData }: Props = {}) => {
       })) || [],
     [placeSuggestions]
   );
-  
+
   // when the user clicked location from place suggestions
   const handleLocationChange = useCallback(
     (key: string) => {

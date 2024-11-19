@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { IJob } from "../../../api-interface/job";
+import { JobDto } from "../../../api-interface/job";
 import {
   VStack,
   HStack,
@@ -17,7 +17,7 @@ import { JobStatus, statusOptions, WorkStyle } from "../../../constants";
 import { StyledWrapper } from "../AddJobModal";
 
 type Props = {
-  selectedJob: IJob;
+  selectedJob: JobDto;
 };
 
 export const Info = ({ selectedJob }: Props) => {
