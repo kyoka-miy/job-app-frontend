@@ -71,6 +71,17 @@ export const InterviewDetailPanel = ({
       setErrorMessage(err);
     },
   });
+  const { doPost: deleteInterview } = usePost({
+    url: CONSTANTS.ENDPOINT.INTERVIEWS(initInterview?.interview.interviewId),
+    method: "DELETE",
+    onSuccess: () => {
+      setShowInterviewDetailPanel && setShowInterviewDetailPanel(null);
+      refetchInterviews();
+    },
+    onError: (err) => {
+      setErrorMessage(err);
+    },
+  });
 
   const handleInputChange = useCallback(
     (value: string, key: keyof AddOrUpdateInterviewRequest) => {
@@ -151,7 +162,7 @@ export const InterviewDetailPanel = ({
     },
     [interviewData.interviewDateTime]
   );
-  const onDeleteInterview = useCallback(() => {}, []);
+
   return (
     <InterviewWrapper>
       <VStack gap={14}>
@@ -274,7 +285,7 @@ export const InterviewDetailPanel = ({
       {showConfirmModal && (
         <DeletionConfirmModal
           onClose={() => setShowConfirmModal(false)}
-          onDelete={() => onDeleteInterview()}
+          onDelete={() => deleteInterview()}
         />
       )}
     </InterviewWrapper>
