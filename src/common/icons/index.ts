@@ -13,3 +13,5 @@ export * from "./InfoIcon";
 export * from "./CompanyIcon";
 export * from "./AssignmentIcon";
 export * from "./FaceIcon";
+export * from "./EditIcon";
+export * from "./TrashIcon";

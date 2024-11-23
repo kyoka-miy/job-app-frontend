@@ -1,11 +1,15 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { CONSTANTS, InterviewTags } from "../../../../constants";
-import { AddOrUpdateInterviewRequest } from "../../../../api-interface/Interview";
+import {
+  AddOrUpdateInterviewRequest,
+  InterviewWithTagsDto,
+} from "../../../../api-interface/Interview";
 import { format, parse, setMilliseconds, setSeconds } from "date-fns";
 import { usePost } from "../../../../common/hooks";
 import {
   Button,
   CheckBox,
+  DeletionConfirmModal,
   HStack,
   SmallText,
   TextInput,
@@ -17,29 +21,57 @@ import styled from "styled-components";
 import { JobDto } from "../../../../api-interface/job";
 
 type Props = {
-  setShowAddPanel: (v: boolean) => void;
+  setShowAddPanel?: (v: boolean) => void;
+  setShowInterviewDetailPanel?: (v: number | null) => void;
   selectedJob: JobDto;
+  refetchInterviews: () => void;
+  initInterview?: InterviewWithTagsDto;
 };
 
-export const InterviewAddPanel = ({ setShowAddPanel, selectedJob }: Props) => {
+export const InterviewDetailPanel = ({
+  setShowAddPanel,
+  setShowInterviewDetailPanel,
+  selectedJob,
+  refetchInterviews,
+  initInterview,
+}: Props) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [interviewData, setInterviewData] =
     useState<AddOrUpdateInterviewRequest>({
-      title: "",
-      tags: undefined,
-      interviewDateTime: new Date(),
-      note: "",
-      completed: false,
+      title: initInterview ? initInterview.interview.title : "",
+      tags: initInterview ? initInterview.tags : undefined,
+      interviewDateTime: initInterview
+        ? new Date(initInterview.interview.interviewDateTime)
+        : new Date(),
+      note: initInterview ? initInterview.interview.note : "",
+      completed: initInterview ? initInterview.interview.completed : false,
     });
+  const initInterviewData = useMemo(() => interviewData, []);
+
   const { doPost } = usePost({
     url: CONSTANTS.ENDPOINT.INTERVIEWS_JOB(selectedJob.jobId),
     onSuccess: () => {
-      setShowAddPanel(false);
+      setErrorMessage("");
+      setShowAddPanel && setShowAddPanel(false);
+      refetchInterviews();
     },
     onError: (err) => {
       setErrorMessage(err);
     },
   });
+  const { doPost: updateInterview } = usePost({
+    url: CONSTANTS.ENDPOINT.INTERVIEWS(initInterview?.interview.interviewId),
+    method: "PUT",
+    onSuccess: () => {
+      setShowInterviewDetailPanel && setShowInterviewDetailPanel(null);
+      refetchInterviews();
+    },
+    onError: (err) => {
+      setErrorMessage(err);
+    },
+  });
+
   const handleInputChange = useCallback(
     (value: string, key: keyof AddOrUpdateInterviewRequest) => {
       if (key === "tags") {
@@ -94,7 +126,7 @@ export const InterviewAddPanel = ({ setShowAddPanel, selectedJob }: Props) => {
       }
       setInterviewData((prev) => ({
         ...prev,
-        interviewDatetime: newDatetime,
+        interviewDateTime: newDatetime,
       }));
     },
     [interviewData.interviewDateTime]
@@ -114,11 +146,12 @@ export const InterviewAddPanel = ({ setShowAddPanel, selectedJob }: Props) => {
       newDatetime = setSeconds(setMilliseconds(newDatetime, 0), 0);
       setInterviewData((prev) => ({
         ...prev,
-        interviewDatetime: newDatetime,
+        interviewDateTime: newDatetime,
       }));
     },
     [interviewData.interviewDateTime]
   );
+  const onDeleteInterview = useCallback(() => {}, []);
   return (
     <InterviewWrapper>
       <VStack gap={14}>
@@ -193,23 +226,57 @@ export const InterviewAddPanel = ({ setShowAddPanel, selectedJob }: Props) => {
           <SmallText color={colors.purple3}>{errorMessage}</SmallText>
         )}
         <HStack gap={8} justify="flex-end">
+          {!initInterview && (
+            <Button
+              onClick={() => doPost(interviewData)}
+              disabled={
+                !(
+                  ValidationUtil.require(interviewData.title) &&
+                  interviewData.interviewDateTime instanceof Date &&
+                  !isNaN(interviewData.interviewDateTime.getTime())
+                )
+              }
+            >
+              Create
+            </Button>
+          )}
+          {initInterview && interviewData !== initInterviewData && (
+            <Button
+              onClick={() => updateInterview(interviewData)}
+              disabled={
+                !(
+                  ValidationUtil.require(interviewData.title) &&
+                  interviewData.interviewDateTime instanceof Date &&
+                  !isNaN(interviewData.interviewDateTime.getTime())
+                )
+              }
+            >
+              Save
+            </Button>
+          )}
+          {initInterview && (
+            <Button onClick={() => setShowConfirmModal(true)} type="secondary">
+              Delete
+            </Button>
+          )}
           <Button
-            onClick={() => doPost(interviewData)}
-            disabled={
-              !(
-                ValidationUtil.require(interviewData.title) &&
-                interviewData.interviewDateTime instanceof Date &&
-                !isNaN(interviewData.interviewDateTime.getTime())
-              )
+            type="secondary"
+            onClick={() =>
+              setShowInterviewDetailPanel
+                ? setShowInterviewDetailPanel(null)
+                : setShowAddPanel && setShowAddPanel(false)
             }
           >
-            Create
-          </Button>
-          <Button type="secondary" onClick={() => setShowAddPanel(false)}>
             Cancel
           </Button>
         </HStack>
       </VStack>
+      {showConfirmModal && (
+        <DeletionConfirmModal
+          onClose={() => setShowConfirmModal(false)}
+          onDelete={() => onDeleteInterview()}
+        />
+      )}
     </InterviewWrapper>
   );
 };
@@ -221,7 +288,7 @@ const InterviewWrapper = styled.div`
   box-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
 `;
 
-export const TagContainer = styled(HStack)`
+const TagContainer = styled(HStack)`
   flex-wrap: wrap;
   width: 80%;
 `;
@@ -243,7 +310,10 @@ export const TagWrapper = styled.div<{
   ${(p) =>
     p.selected && `background: ${p.backgroundColor}; border-color: ${p.color};`}
 `;
-export const TagText = styled(SmallText)<{ hoveredColor: string; selected: boolean }>`
+export const TagText = styled(SmallText)<{
+  hoveredColor: string;
+  selected: boolean;
+}>`
   ${TagWrapper}:hover & {
     color: ${(p) => p.hoveredColor};
   }
