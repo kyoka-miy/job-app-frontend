@@ -3,7 +3,7 @@ import { CONSTANTS, InterviewTags } from "../../../../constants";
 import {
   AddOrUpdateInterviewRequest,
   InterviewWithTagsDto,
-} from "../../../../api-interface/Interview";
+} from "../../../../api-interface/Interview"
 import { format, parse, setMilliseconds, setSeconds } from "date-fns";
 import { usePost } from "../../../../common/hooks";
 import {

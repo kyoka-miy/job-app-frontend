@@ -68,8 +68,8 @@ export const WorkStyle = {
 
 export const JobDetailMenu = [
   { text: "Info", icon: InfoIcon },
-  { text: "Assignments", icon: AssignmentIcon },
   { text: "Interviews", icon: FaceIcon },
+  { text: "Assignments", icon: AssignmentIcon },
   { text: "Activities", icon: ActivityIcon },
   { text: "Notes", icon: NoteIcon },
   { text: "Company", icon: CompanyIcon },

@@ -38,7 +38,7 @@ export const Interviews = ({ selectedJob }: Props) => {
       )}
       {interviews &&
         interviews.map((v, index) =>
-          showInterviewDetailPanel != index ? (
+          showInterviewDetailPanel !== index ? (
             <InterviewWrapper
               key={index}
               gap={12}
