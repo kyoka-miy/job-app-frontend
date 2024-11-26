@@ -22,7 +22,7 @@ export const Assignments = ({ selectedJob }: Props) => {
   const { data: assignments, refetch: refetchAssignments } = useFetch<
     AssignmentDto[]
   >({
-    url: CONSTANTS.ENDPOINT.INTERVIEWS_JOB(selectedJob.jobId),
+    url: CONSTANTS.ENDPOINT.ASSIGNMENTS_JOB(selectedJob.jobId),
     shouldFetch: true,
   });
   return (

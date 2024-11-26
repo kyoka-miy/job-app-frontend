@@ -36,7 +36,11 @@ export const Job = () => {
           {(Object.keys(JobStatus) as Array<keyof typeof JobStatus>).map(
             (v) => (
               <HStack align="center" gap={6} key={v}>
-                <Tab onClick={() => setStatus(v)} selected={status === v}>
+                <Tab
+                  onClick={() => setStatus(v)}
+                  selected={status === v}
+                  color={v === "REJECTED" ? colors.grayText : colors.deepSlate}
+                >
                   {JobStatus[v]}
                 </Tab>
                 {v !== "OFFER" && v !== "REJECTED" && <ArrowIcon />}

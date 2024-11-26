@@ -7,12 +7,13 @@ type Props = {
   onClick?: (v: any) => void;
   selected?: boolean;
   width?: number | string;
+  color?: string;
 };
 
-export const Tab = ({ children, selected = false, width, onClick }: Props) => {
+export const Tab = ({ children, selected = false, width, onClick, color }: Props) => {
   return (
     <StyledTabWrapper width={width} selected={selected} onClick={onClick}>
-      <StyledMediumText bold selected={selected}>
+      <StyledMediumText bold selected={selected} color={color}>
         {children}
       </StyledMediumText>
     </StyledTabWrapper>

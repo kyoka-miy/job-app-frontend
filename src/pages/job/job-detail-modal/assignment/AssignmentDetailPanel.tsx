@@ -49,7 +49,7 @@ export const AssignmentDetailPanel = ({
   const initAssignmentData = useMemo(() => assignmentData, []);
 
   const { doPost: addAssignment } = usePost({
-    url: CONSTANTS.ENDPOINT.INTERVIEWS_JOB(selectedJob.jobId),
+    url: CONSTANTS.ENDPOINT.ASSIGNMENTS_JOB(selectedJob.jobId),
     onSuccess: () => {
       setErrorMessage("");
       setShowAddPanel && setShowAddPanel(false);
@@ -59,8 +59,8 @@ export const AssignmentDetailPanel = ({
       setErrorMessage(err);
     },
   });
-  const { doPost: updateInterview } = usePost({
-    url: CONSTANTS.ENDPOINT.INTERVIEWS(initAssigment?.assignmentId),
+  const { doPost: updateAssignment } = usePost({
+    url: CONSTANTS.ENDPOINT.ASSIGNMENTS(initAssigment?.assignmentId),
     method: "PUT",
     onSuccess: () => {
       setShowAssignmentDetailPanel && setShowAssignmentDetailPanel(null);
@@ -70,8 +70,8 @@ export const AssignmentDetailPanel = ({
       setErrorMessage(err);
     },
   });
-  const { doPost: deleteInterview } = usePost({
-    url: CONSTANTS.ENDPOINT.INTERVIEWS(initAssigment?.assignmentId),
+  const { doPost: deleteAssignment } = usePost({
+    url: CONSTANTS.ENDPOINT.ASSIGNMENTS(initAssigment?.assignmentId),
     method: "DELETE",
     onSuccess: () => {
       setShowAssignmentDetailPanel && setShowAssignmentDetailPanel(null);
@@ -217,7 +217,7 @@ export const AssignmentDetailPanel = ({
           )}
           {initAssigment && assignmentData !== initAssignmentData && (
             <Button
-              onClick={() => updateInterview(assignmentData)}
+              onClick={() => updateAssignment(assignmentData)}
               disabled={
                 !(
                   ValidationUtil.require(assignmentData.title) &&
@@ -248,7 +248,7 @@ export const AssignmentDetailPanel = ({
       {showConfirmModal && (
         <DeletionConfirmModal
           onClose={() => setShowConfirmModal(false)}
-          onDelete={() => deleteInterview()}
+          onDelete={() => deleteAssignment()}
         />
       )}
     </InterviewWrapper>

@@ -25,6 +25,10 @@ export const CONSTANTS = {
       `${endpointBase}/interviews/${interviewId}`,
     INTERVIEWS_JOB: (jobId: string) =>
       `${endpointBase}/interviews/jobs/${jobId}`,
+    ASSIGNMENTS: (assignmentId?: string) =>
+      `${endpointBase}/assignments/${assignmentId}`,
+    ASSIGNMENTS_JOB: (jobId: string) =>
+      `${endpointBase}/assignments/jobs/${jobId}`,
   },
   LINK: {
     SIGN_UP: `/sign-up`,
