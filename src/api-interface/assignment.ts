@@ -1,11 +1,11 @@
 export type AssignmentDto = AddOrUpdateAssignmentRequest & {
-    assignmentId: string;
-    jobId: string;
-}
+  assignmentId: string;
+  jobId: string;
+};
 
 export type AddOrUpdateAssignmentRequest = {
-    title: string;
-    deadlineDateTime: Date;
-    note?: string;
-    completed: boolean;
-}
+  title: string;
+  deadlineDatetime: Date;
+  note?: string;
+  completed: boolean;
+};

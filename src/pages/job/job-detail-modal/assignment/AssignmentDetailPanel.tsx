@@ -40,8 +40,8 @@ export const AssignmentDetailPanel = ({
   const [assignmentData, setAssignmentData] =
     useState<AddOrUpdateAssignmentRequest>({
       title: initAssigment ? initAssigment.title : "",
-      deadlineDateTime: initAssigment
-        ? new Date(initAssigment.deadlineDateTime)
+      deadlineDatetime: initAssigment
+        ? new Date(initAssigment.deadlineDatetime)
         : new Date(),
       note: initAssigment ? initAssigment.note : "",
       completed: initAssigment ? initAssigment.completed : false,
@@ -103,10 +103,10 @@ export const AssignmentDetailPanel = ({
     (date: string) => {
       let newDatetime = new Date();
       if (
-        assignmentData.deadlineDateTime instanceof Date &&
-        !isNaN(assignmentData.deadlineDateTime.getTime())
+        assignmentData.deadlineDatetime instanceof Date &&
+        !isNaN(assignmentData.deadlineDatetime.getTime())
       ) {
-        const time = format(assignmentData.deadlineDateTime, "HH:mm");
+        const time = format(assignmentData.deadlineDatetime, "HH:mm");
         newDatetime = parse(
           `${date}T${time}`,
           "yyyy-MM-dd'T'HH:mm",
@@ -122,17 +122,17 @@ export const AssignmentDetailPanel = ({
       }
       setAssignmentData((prev) => ({
         ...prev,
-        deadlineDateTime: newDatetime,
+        deadlineDatetime: newDatetime,
       }));
     },
-    [assignmentData.deadlineDateTime]
+    [assignmentData.deadlineDatetime]
   );
   const handleTimeChange = useCallback(
     (time: string) => {
       const date =
-        assignmentData.deadlineDateTime instanceof Date &&
-        !isNaN(assignmentData.deadlineDateTime.getTime())
-          ? format(assignmentData.deadlineDateTime, "yyyy-MM-dd")
+        assignmentData.deadlineDatetime instanceof Date &&
+        !isNaN(assignmentData.deadlineDatetime.getTime())
+          ? format(assignmentData.deadlineDatetime, "yyyy-MM-dd")
           : "";
       let newDatetime = parse(
         `${date}T${time}`,
@@ -142,10 +142,10 @@ export const AssignmentDetailPanel = ({
       newDatetime = setSeconds(setMilliseconds(newDatetime, 0), 0);
       setAssignmentData((prev) => ({
         ...prev,
-        deadlineDateTime: newDatetime,
+        deadlineDatetime: newDatetime,
       }));
     },
-    [assignmentData.deadlineDateTime]
+    [assignmentData.deadlineDatetime]
   );
   return (
     <InterviewWrapper>
@@ -164,9 +164,9 @@ export const AssignmentDetailPanel = ({
             type="date"
             required
             value={
-              assignmentData.deadlineDateTime instanceof Date &&
-              !isNaN(assignmentData.deadlineDateTime.getTime())
-                ? format(assignmentData.deadlineDateTime, "yyyy-MM-dd")
+              assignmentData.deadlineDatetime instanceof Date &&
+              !isNaN(assignmentData.deadlineDatetime.getTime())
+                ? format(assignmentData.deadlineDatetime, "yyyy-MM-dd")
                 : ""
             }
             onChange={(v) => handleDateChange(v)}
@@ -177,9 +177,9 @@ export const AssignmentDetailPanel = ({
             type="time"
             required
             value={
-              assignmentData.deadlineDateTime instanceof Date &&
-              !isNaN(assignmentData.deadlineDateTime.getTime())
-                ? format(assignmentData.deadlineDateTime, "HH:mm")
+              assignmentData.deadlineDatetime instanceof Date &&
+              !isNaN(assignmentData.deadlineDatetime.getTime())
+                ? format(assignmentData.deadlineDatetime, "HH:mm")
                 : ""
             }
             onChange={(v) => handleTimeChange(v)}
@@ -207,8 +207,8 @@ export const AssignmentDetailPanel = ({
               disabled={
                 !(
                   ValidationUtil.require(assignmentData.title) &&
-                  assignmentData.deadlineDateTime instanceof Date &&
-                  !isNaN(assignmentData.deadlineDateTime.getTime())
+                  assignmentData.deadlineDatetime instanceof Date &&
+                  !isNaN(assignmentData.deadlineDatetime.getTime())
                 )
               }
             >
@@ -221,8 +221,8 @@ export const AssignmentDetailPanel = ({
               disabled={
                 !(
                   ValidationUtil.require(assignmentData.title) &&
-                  assignmentData.deadlineDateTime instanceof Date &&
-                  !isNaN(assignmentData.deadlineDateTime.getTime())
+                  assignmentData.deadlineDatetime instanceof Date &&
+                  !isNaN(assignmentData.deadlineDatetime.getTime())
                 )
               }
             >
@@ -237,7 +237,8 @@ export const AssignmentDetailPanel = ({
           <Button
             type="secondary"
             onClick={() => {
-              setShowAssignmentDetailPanel && setShowAssignmentDetailPanel(null);
+              setShowAssignmentDetailPanel &&
+                setShowAssignmentDetailPanel(null);
               setShowAddPanel && setShowAddPanel(false);
             }}
           >

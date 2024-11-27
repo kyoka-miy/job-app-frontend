@@ -49,24 +49,23 @@ export const Assignments = ({ selectedJob }: Props) => {
               completed={v.completed}
               onClick={() => setShowAssignmentDetailPanel(index)}
             >
-              <SmallText bold>{v.title}</SmallText>
               <HStack justify="space-between" width="100%">
-                <VStack gap={12} width="80%">
-                  {v.note && (
-                    <NoteContainer>
-                      <SmallText>{v.note}</SmallText>
-                    </NoteContainer>
-                  )}
+                <VStack gap={8}>
+                  <SmallText bold>{v.title}</SmallText>
+                  <VStack gap={12} width="80%">
+                    {v.note && (
+                      <NoteContainer>
+                        <SmallText>{v.note}</SmallText>
+                      </NoteContainer>
+                    )}
+                  </VStack>
                 </VStack>
-                <VStack align="flex-end" gap={4} width="20%">
+                <VStack align="flex-end" gap={8} width="20%">
                   <SmallText>
-                    {v.deadlineDateTime instanceof Date &&
-                    !isNaN(v.deadlineDateTime.getTime())
-                      ? format(v.deadlineDateTime, "yyyy/MM/dd")
-                      : ""}
+                    {format(v.deadlineDatetime, "yyyy/MM/dd")}
                   </SmallText>
                   <SmallText color={colors.grayText}>
-                    {moment(v.deadlineDateTime).fromNow()}
+                    {moment(v.deadlineDatetime).fromNow()}
                   </SmallText>
                 </VStack>
               </HStack>
