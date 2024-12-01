@@ -17,6 +17,7 @@ import { Info } from "./Info";
 import { Assignments } from "./assignment/Assignments";
 import { Interviews } from "./interview/Interviews";
 import { useJob } from "../../../common/hooks";
+import { Activity } from "./activity/Activity";
 
 type Props = {
   onClose: () => void;
@@ -55,9 +56,14 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
           ))}
         </HStackWithBorder>
         {selectedMenu === "Info" && <Info selectedJob={selectedJob} />}
-        {selectedMenu === "Assignments" && <Assignments selectedJob={selectedJob}/>}
+        {selectedMenu === "Assignments" && (
+          <Assignments selectedJob={selectedJob} />
+        )}
         {selectedMenu === "Interviews" && (
           <Interviews selectedJob={selectedJob} />
+        )}
+        {selectedMenu === "Activities" && (
+          <Activity selectedJob={selectedJob} />
         )}
       </VStack>
       {showConfirmModal && (

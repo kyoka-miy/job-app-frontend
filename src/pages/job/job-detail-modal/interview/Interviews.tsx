@@ -45,34 +45,36 @@ export const Interviews = ({ selectedJob }: Props) => {
               completed={v.interview.completed}
               onClick={() => setShowInterviewDetailPanel(index)}
             >
-              <SmallText bold>{v.interview.title}</SmallText>
               <HStack justify="space-between" width="100%">
-                <VStack gap={12} width="80%">
-                  <TagContainer gap={12}>
-                    {v.tags.map((tag, index) => (
-                      <TagWrapper
-                        key={index}
-                        color={InterviewTags[tag].color}
-                        backgroundColor={InterviewTags[tag].backgroundColor}
-                        selected={v.tags.includes(tag)}
-                        completed={v.interview.completed}
-                      >
-                        <TagText
-                          hoveredColor={InterviewTags[tag].color}
-                          color={colors.grayText}
+                <VStack gap={10}>
+                  <SmallText bold>{v.interview.title}</SmallText>
+                  <VStack gap={12} width="80%">
+                    <TagContainer gap={12}>
+                      {v.tags.map((tag, index) => (
+                        <TagWrapper
+                          key={index}
+                          color={InterviewTags[tag].color}
+                          backgroundColor={InterviewTags[tag].backgroundColor}
                           selected={v.tags.includes(tag)}
                           completed={v.interview.completed}
                         >
-                          {InterviewTags[tag].text}
-                        </TagText>
-                      </TagWrapper>
-                    ))}
-                  </TagContainer>
-                  {v.interview.note && (
-                    <NoteContainer>
-                      <SmallText>{v.interview.note}</SmallText>
-                    </NoteContainer>
-                  )}
+                          <TagText
+                            hoveredColor={InterviewTags[tag].color}
+                            color={colors.grayText}
+                            selected={v.tags.includes(tag)}
+                            completed={v.interview.completed}
+                          >
+                            {InterviewTags[tag].text}
+                          </TagText>
+                        </TagWrapper>
+                      ))}
+                    </TagContainer>
+                    {v.interview.note && (
+                      <NoteContainer>
+                        <SmallText>{v.interview.note}</SmallText>
+                      </NoteContainer>
+                    )}
+                  </VStack>
                 </VStack>
                 <VStack align="flex-end" gap={4} width="20%">
                   <SmallText>

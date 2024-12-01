@@ -148,7 +148,7 @@ export const AssignmentDetailPanel = ({
     [assignmentData.deadlineDatetime]
   );
   return (
-    <InterviewWrapper>
+    <AssignmentWrapper>
       <VStack gap={14}>
         <TextInput
           title="Title"
@@ -252,11 +252,11 @@ export const AssignmentDetailPanel = ({
           onDelete={() => deleteAssignment()}
         />
       )}
-    </InterviewWrapper>
+    </AssignmentWrapper>
   );
 };
 
-const InterviewWrapper = styled.div`
+const AssignmentWrapper = styled.div`
   padding: 26px 20px;
   border-radius: 8px;
   background-color: ${colors.white};

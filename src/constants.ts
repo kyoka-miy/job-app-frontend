@@ -9,7 +9,6 @@ import {
   MapIcon,
   MetricsIcon,
 } from "./common/icons";
-import { NoteIcon } from "./common/icons/NoteIcon";
 
 const endpointBase = process.env.REACT_APP_ENDPOINT_BASE;
 export const CONSTANTS = {
@@ -29,6 +28,10 @@ export const CONSTANTS = {
       `${endpointBase}/assignments/${assignmentId}`,
     ASSIGNMENTS_JOB: (jobId: string) =>
       `${endpointBase}/assignments/jobs/${jobId}`,
+    ACTIVITIES: (activityId?: string) =>
+      `${endpointBase}/activities/${activityId}`,
+    ACTIVITIES_JOB: (jobId: string) =>
+      `${endpointBase}/activities/jobs/${jobId}`,
   },
   LINK: {
     SIGN_UP: `/sign-up`,
@@ -75,7 +78,6 @@ export const JobDetailMenu = [
   { text: "Interviews", icon: FaceIcon },
   { text: "Assignments", icon: AssignmentIcon },
   { text: "Activities", icon: ActivityIcon },
-  { text: "Notes", icon: NoteIcon },
   { text: "Company", icon: CompanyIcon },
 ];
 

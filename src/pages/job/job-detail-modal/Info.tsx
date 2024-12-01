@@ -128,6 +128,13 @@ export const Info = ({ selectedJob }: Props) => {
           )
         )}
       </HStack>
+      <TextInput
+        value={jobData.note}
+        onChange={(value) => handleInputChange(value, "note")}
+        title="Note"
+        type="textarea"
+        height={100}
+      />
     </VStack>
   );
 };
