@@ -4,7 +4,7 @@ import { SignUp } from "./pages/sign-up";
 import { GlobalStyle } from "./common/styles/globalStyle";
 import { Login } from "./pages/login";
 import { CONSTANTS } from "./constants";
-import { Boards } from "./pages/boards";
+import { Boards } from "./pages/board-select";
 import { Home } from "./pages/home";
 import { BoardContextProvider } from "./contexts/board";
 

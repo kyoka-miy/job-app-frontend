@@ -1,5 +1,12 @@
 import styled from "styled-components";
-import { Button, HStack, SmallText, Tab, VStack } from "../../common";
+import {
+  Button,
+  HStack,
+  SmallText,
+  Tab,
+  VStack,
+  WhitePanel,
+} from "../../common";
 import { ArrowIcon } from "../../common/icons";
 import { CONSTANTS, JobStatus } from "../../constants";
 import { useEffect, useState } from "react";
@@ -20,7 +27,6 @@ export const Job = () => {
     params: {
       status: status,
     },
-    onSuccess: () => {},
     onError: (err) => {
       setErrorMessage(err);
     },
@@ -57,7 +63,7 @@ export const Job = () => {
       )}
       <JobList>
         {data?.map((job, index) => (
-          <JobWrapper key={index} onClick={() => setSelectedJob(job)}>
+          <StyledWhitePanel key={index} onClick={() => setSelectedJob(job)}>
             <VStack gap={16}>
               <VStack gap={4}>
                 <SmallText>{job.companyName}</SmallText>
@@ -69,7 +75,7 @@ export const Job = () => {
                 </StyledSmallText>
               </VStack>
             </VStack>
-          </JobWrapper>
+          </StyledWhitePanel>
         ))}
       </JobList>
       {showAddJobModal && (
@@ -94,19 +100,15 @@ const JobList = styled.div`
   margin-top: 20px;
 `;
 
-const JobWrapper = styled.div`
-  padding: 12px;
-  border-radius: 8px;
-  background-color: ${colors.white};
+const StyledWhitePanel = styled(WhitePanel)`
   width: calc((100% - 120px) / 4);
-  box-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
-
-  &:not(:last-child) {
-    margin-right: 40px;
+  margin-bottom: 40px;
+  &:nth-child(4n) {
+    margin-right: 0;
   }
-  &:hover {
-    cursor: pointer;
-    border: 1px solid ${colors.purple1};
+
+  &:not(:nth-child(4n)) {
+    margin-right: 40px;
   }
 `;
 

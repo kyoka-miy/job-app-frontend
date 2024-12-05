@@ -9,6 +9,7 @@ import {
   SmallText,
   TextInput,
   VStack,
+  WhitePanel,
 } from "../../common";
 import React from "react";
 import styled from "styled-components";
@@ -36,8 +37,8 @@ export const Boards: React.FC = () => {
   const { boards, setBoardStore } = useBoardContext();
 
   const onSelectBoard = useCallback(
-    (board: BoardDto) => {
-      setBoardStore(board);
+    (selectedBoard: BoardDto) => {
+      setBoardStore(selectedBoard);
       navigate(CONSTANTS.LINK.JOB);
     },
     [setBoardStore, navigate]
@@ -78,36 +79,37 @@ export const Boards: React.FC = () => {
         </Modal>
       )}
       (
-        <BoardWrapper>
-          <VStack gap={50} align="center">
-            <LargeText bold>Select Your Board</LargeText>
-            <VStack gap={40} align="center">
-              <Button width={220} onClick={() => setShowModal(true)} plusIcon>
-                Add board
-              </Button>
-              <VStack gap={24}>
-                <BoardList>
-                  {boards?.map((v, index) => (
-                    <div key={index} style={{ margin: 20 }}>
-                      <Panel
-                        width={280}
-                        height={100}
-                        onClick={() => onSelectBoard(v)}
-                      >
-                        <VStack align="left" gap={18}>
-                          <MediumText>{v.name}</MediumText>
-                          <SmallText color={colors.mutedGraphite}>
-                            Created {moment(v.createdDatetime).fromNow()}
-                          </SmallText>
-                        </VStack>
-                      </Panel>
-                    </div>
-                  ))}
-                </BoardList>
-              </VStack>
+      <BoardWrapper>
+        <VStack gap={50} align="center">
+          <LargeText bold>Select Your Board</LargeText>
+          <VStack gap={40} align="center">
+            <Button
+              width={220}
+              onClick={() => setShowModal(true)}
+              plusIcon
+              bold
+            >
+              Add Board
+            </Button>
+            <VStack gap={24}>
+              <BoardList>
+                {boards?.map((v, index) => (
+                  <div key={index} style={{ margin: 20 }}>
+                    <StyledWhitePanel onClick={() => onSelectBoard(v)}>
+                      <VStack align="left" gap={35}>
+                        <MediumText>{v.name}</MediumText>
+                        <SmallText color={colors.mutedGraphite}>
+                          Created {moment(v.createdDatetime).fromNow()}
+                        </SmallText>
+                      </VStack>
+                    </StyledWhitePanel>
+                  </div>
+                ))}
+              </BoardList>
             </VStack>
           </VStack>
-        </BoardWrapper>
+        </VStack>
+      </BoardWrapper>
       )
     </>
   );
@@ -128,23 +130,9 @@ const BoardList = styled.div`
   overflow-y: auto;
 `;
 
-const Panel = styled.div<{
-  width: number | string;
-  height: number | string;
-}>`
+const StyledWhitePanel = styled(WhitePanel)`
   display: flex;
   justify-content: center;
-  width: ${(p) => (typeof p.width === "number" ? `${p.width}px` : p.width)};
-  height: ${(p) => (typeof p.height === "number" ? `${p.height}px` : p.height)};
-  padding: 20px;
-  border: 1px solid ${colors.foggyGray};
-  border-radius: 8px;
-  &:hover {
-    background-color: ${colors.purple7};
-    border-color: ${colors.purple2};
-    cursor: pointer;
-  }
-  &:active {
-    background-color: ${colors.purple2};
-  }
+  width: 280px;
+  height: 100px;
 `;

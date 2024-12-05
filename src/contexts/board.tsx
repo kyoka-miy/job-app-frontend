@@ -33,6 +33,7 @@ export const BoardContextProvider: React.FC<Props> = ({ children }) => {
   const [boards, setBoards] = useState<BoardDto[] | null>(null);
   const setBoardStore = (board: BoardDto) => {
     localStorage.setItem("board", JSON.stringify(board));
+    setBoard(board);
   };
 
   useFetch<BoardDto>({
@@ -51,7 +52,7 @@ export const BoardContextProvider: React.FC<Props> = ({ children }) => {
       console.log(err);
       navigate(CONSTANTS.LINK.SIGN_UP);
     },
-    shouldFetch: true
+    shouldFetch: true,
   });
 
   return (
