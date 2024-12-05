@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { JobDto } from "../../../api-interface/job";
+import { JobDto } from "../../../../api-interface/job";
 import {
   VStack,
   HStack,
@@ -9,18 +9,18 @@ import {
   CheckBox,
   SmallText,
   HoverMenu,
-} from "../../../common";
-import { useJob } from "../../../common/hooks";
-import { colors } from "../../../common/styles";
-import { ValidationUtil } from "../../../common/utils/validation";
-import { JobStatus, statusOptions, WorkStyle } from "../../../constants";
-import { StyledWrapper } from "../AddJobModal";
+} from "../../../../common";
+import { useJob } from "../../../../common/hooks";
+import { colors } from "../../../../common/styles";
+import { ValidationUtil } from "../../../../common/utils/validation";
+import { JobStatus, statusOptions, WorkStyle } from "../../../../constants";
+import styled from "styled-components";
 
 type Props = {
-  selectedJob: JobDto;
+  selectedJob?: JobDto;
 };
 
-export const Info = ({ selectedJob }: Props) => {
+export const JobInfo = ({ selectedJob }: Props) => {
   const {
     jobData,
     handleInputChange,
@@ -31,6 +31,7 @@ export const Info = ({ selectedJob }: Props) => {
     handleCheckBoxChange,
     setShowSuggestions,
     updateJob,
+    addJob,
     errorMessage,
   } = useJob({ initJobData: selectedJob });
 
@@ -40,13 +41,27 @@ export const Info = ({ selectedJob }: Props) => {
         <SmallText color={colors.purple3}>{errorMessage}</SmallText>
       )}
       <HStack justify="flex-end">
-        {selectedJob !== jobData &&
+        {selectedJob &&
+          selectedJob !== jobData &&
           ValidationUtil.require(jobData.companyName) &&
           ValidationUtil.require(jobData.jobTitle) && (
             <Button onClick={() => updateJob(jobData)} bold>
               Save
             </Button>
           )}
+        {!selectedJob && (
+          <Button
+            onClick={() => addJob(jobData)}
+            bold
+            plusIcon
+            disabled={
+              !ValidationUtil.require(jobData.companyName) ||
+              !ValidationUtil.require(jobData.jobTitle)
+            }
+          >
+            Add
+          </Button>
+        )}
       </HStack>
       <HStack gap={12}>
         <TextInput
@@ -138,3 +153,8 @@ export const Info = ({ selectedJob }: Props) => {
     </VStack>
   );
 };
+
+const StyledWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;

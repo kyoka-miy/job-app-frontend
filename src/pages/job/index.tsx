@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {
   Button,
   HStack,
+  Modal,
   SmallText,
   Tab,
   VStack,
@@ -10,12 +11,12 @@ import {
 import { ArrowIcon } from "../../common/icons";
 import { CONSTANTS, JobStatus } from "../../constants";
 import { useEffect, useState } from "react";
-import { AddJobModal } from "./AddJobModal";
 import { JobDto } from "../../api-interface/job";
 import { useFetch } from "../../common/hooks";
 import { colors } from "../../common/styles";
 import moment from "moment";
 import { JobDetailModal } from "./job-detail-modal/JobDetailModal";
+import { JobInfo } from "./job-detail-modal/info/JobInfo";
 
 export const Job = () => {
   const [status, setStatus] = useState<keyof typeof JobStatus>("WISHLIST");
@@ -79,7 +80,13 @@ export const Job = () => {
         ))}
       </JobList>
       {showAddJobModal && (
-        <AddJobModal onClose={() => setShowAddJobModal(false)} />
+        <Modal
+          onClose={() => setShowAddJobModal(false)}
+          width="85%"
+          innerWidth="85%"
+        >
+          <JobInfo />
+        </Modal>
       )}
       {selectedJob && (
         <JobDetailModal

@@ -13,7 +13,7 @@ import { JobDetailMenu } from "../../../constants";
 import { StyledIconTextWrapper } from "../../Header";
 import { JobDto } from "../../../api-interface/job";
 import styled from "styled-components";
-import { Info } from "./Info";
+import { JobInfo } from "./info/JobInfo";
 import { Assignments } from "./assignment/Assignments";
 import { Interviews } from "./interview/Interviews";
 import { useJob } from "../../../common/hooks";
@@ -55,7 +55,7 @@ export const JobDetailModal: React.FC<Props> = ({ onClose, selectedJob }) => {
             </StyledIconTextWrapper>
           ))}
         </HStackWithBorder>
-        {selectedMenu === "Info" && <Info selectedJob={selectedJob} />}
+        {selectedMenu === "Info" && <JobInfo selectedJob={selectedJob} />}
         {selectedMenu === "Assignments" && (
           <Assignments selectedJob={selectedJob} />
         )}
