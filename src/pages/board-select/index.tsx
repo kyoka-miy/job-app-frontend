@@ -7,7 +7,6 @@ import {
   LargeText,
   MediumText,
   SmallText,
-  TextInput,
   VStack,
   WhitePanel,
 } from "../../common";
@@ -15,25 +14,12 @@ import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/styles";
 import moment from "moment";
-import { Modal } from "../../common";
-import { ValidationUtil } from "../../common/utils/validation";
-import { usePost } from "../../common/hooks/usePost";
 import { useBoardContext } from "../../contexts/board";
+import { BoardDetailModal } from "./BoardDetailModal";
 
-export const Boards: React.FC = () => {
+export const BoardSelect: React.FC = () => {
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [name, setName] = useState<string>("");
-  const { doPost, isLoading: postIsLoading } = usePost({
-    url: CONSTANTS.ENDPOINT.BOARDS,
-    onSuccess: () => {
-      window.location.reload();
-    },
-    onError: (err) => {
-      setErrorMessage(err);
-    },
-  });
   const { boards, setBoardStore } = useBoardContext();
 
   const onSelectBoard = useCallback(
@@ -43,42 +29,10 @@ export const Boards: React.FC = () => {
     },
     [setBoardStore, navigate]
   );
-  const onAddBoard = useCallback(
-    (name: string) => {
-      doPost({
-        name: name,
-      });
-    },
-    [doPost]
-  );
 
   return (
     <>
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <VStack gap={40} align="center">
-            <MediumText>Add a board</MediumText>
-            <TextInput
-              value={name}
-              onChange={setName}
-              validate={(v) => ValidationUtil.require(v)}
-              title="Name"
-              required
-            />
-            {errorMessage && (
-              <SmallText color={colors.purple3}>{errorMessage}</SmallText>
-            )}
-            <Button
-              disabled={!ValidationUtil.require(name)}
-              loading={postIsLoading}
-              onClick={() => onAddBoard(name)}
-            >
-              Add
-            </Button>
-          </VStack>
-        </Modal>
-      )}
-      (
+      {showModal && <BoardDetailModal onClose={() => setShowModal(false)}/>}(
       <BoardWrapper>
         <VStack gap={50} align="center">
           <LargeText bold>Select Your Board</LargeText>

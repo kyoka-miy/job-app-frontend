@@ -21,7 +21,7 @@ export const SignUp: React.FC = () => {
     onSuccess: (data) => {
       sessionStorage.setItem("token", data.token);
       setErrorMessage("");
-      navigate("/job");
+      navigate(CONSTANTS.LINK.BOARD_SELECT);
     },
     onError: (err) => {
       setErrorMessage(err);

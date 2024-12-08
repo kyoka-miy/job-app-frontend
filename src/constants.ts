@@ -17,6 +17,7 @@ export const CONSTANTS = {
     AUTH_LOGIN: `${endpointBase}/auth/login`,
     LOGOUT: `${endpointBase}/account-logout`,
     BOARDS: `${endpointBase}/boards`,
+    BOARD: (boardId: string) => `${endpointBase}/boards/${boardId}`,
     JOBS: `${endpointBase}/jobs`,
     JOB_UPDATE: (jobId: string) => `${endpointBase}/jobs/${jobId}`,
     PLACES: `${endpointBase}/places`,
@@ -32,7 +33,7 @@ export const CONSTANTS = {
       `${endpointBase}/activities/${activityId}`,
     ACTIVITIES_JOB: (jobId: string) =>
       `${endpointBase}/activities/jobs/${jobId}`,
-    ACCOUNT: `${endpointBase}/account`
+    ACCOUNT: `${endpointBase}/account`,
   },
   LINK: {
     SIGN_UP: `/sign-up`,

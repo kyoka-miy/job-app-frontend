@@ -3,7 +3,7 @@ import { colors } from "../styles";
 
 type Props = {
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
 };
 export const WhitePanel = ({ children, onClick, className }: Props) => {
