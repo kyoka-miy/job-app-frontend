@@ -3,6 +3,7 @@ import { Header } from "./Header";
 import { Route, Routes } from "react-router-dom";
 import { CONSTANTS } from "../constants";
 import { Job } from "./job";
+import { Profile } from "./profile";
 
 export const Home = () => {
   return (
@@ -11,6 +12,7 @@ export const Home = () => {
       <ContentArea>
         <Routes>
           <Route path={CONSTANTS.LINK.JOB} element={<Job />}/>
+          <Route path={CONSTANTS.LINK.PROFILE} element={<Profile />}/>
         </Routes>
       </ContentArea>
     </HomeWrapper>

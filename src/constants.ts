@@ -32,6 +32,7 @@ export const CONSTANTS = {
       `${endpointBase}/activities/${activityId}`,
     ACTIVITIES_JOB: (jobId: string) =>
       `${endpointBase}/activities/jobs/${jobId}`,
+    ACCOUNT: `${endpointBase}/account`
   },
   LINK: {
     SIGN_UP: `/sign-up`,
