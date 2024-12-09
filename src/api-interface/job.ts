@@ -1,4 +1,5 @@
 import { WorkStyle, JobStatus } from "../constants";
+import { InterviewDto, InterviewWithTagsDto } from "./Interview";
 
 export type JobDto = {
   jobId: string;
@@ -28,4 +29,8 @@ export type AddOrUpdateJobRequest = {
   appliedDate?: Date;
   jobBoard?: string;
   note?: string;
+};
+
+export type JobWithInterviewDto = InterviewWithTagsDto & {
+  job: JobDto;
 };

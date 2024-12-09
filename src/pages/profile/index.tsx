@@ -5,7 +5,6 @@ import { CONSTANTS } from "../../constants";
 import { AccountDto, AccountUpdateDto } from "../../api-interface/account";
 import { ValidationUtil } from "../../common/utils/validation";
 import styled from "styled-components";
-import { error } from "console";
 import { colors } from "../../common/styles";
 
 export const Profile = () => {

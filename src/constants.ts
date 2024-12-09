@@ -19,6 +19,7 @@ export const CONSTANTS = {
     BOARDS: `${endpointBase}/boards`,
     BOARD: (boardId: string) => `${endpointBase}/boards/${boardId}`,
     JOBS: `${endpointBase}/jobs`,
+    JOBS_INTERVIEWS: `${endpointBase}/jobs/interviews`,
     JOB_UPDATE: (jobId: string) => `${endpointBase}/jobs/${jobId}`,
     PLACES: `${endpointBase}/places`,
     INTERVIEWS: (interviewId?: string) =>
