@@ -38,7 +38,7 @@ export const Button = ({
     >
       <HStack gap={4} align="center">
         {plusIcon && <StyledPlusIcon disabled={disabled} />}
-        {loading ? <SmallText>Loading...</SmallText> : children}
+        {loading ? <SmallText color={colors.white}>Loading...</SmallText> : children}
       </HStack>
     </StyledButton>
   );

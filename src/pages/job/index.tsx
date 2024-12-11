@@ -12,7 +12,11 @@ import {
 import { ArrowIcon } from "../../common/icons";
 import { CONSTANTS, InterviewTags, JobStatus } from "../../constants";
 import { useEffect, useState } from "react";
-import { JobDto, JobWithInterviewDto } from "../../api-interface/job";
+import {
+  JobDto,
+  JobWithAssignmentDto,
+  JobWithInterviewDto,
+} from "../../api-interface/job";
 import { useFetch } from "../../common/hooks";
 import { colors } from "../../common/styles";
 import moment from "moment";
@@ -46,6 +50,14 @@ export const Job = () => {
     shouldFetch: true,
   });
 
+  const { data: JobWithAssignment } = useFetch<JobWithAssignmentDto[]>({
+    url: CONSTANTS.ENDPOINT.JOBS_ASSIGNMENTS,
+    onError: (err) => {
+      setErrorMessage(err);
+    },
+    shouldFetch: true,
+  });
+
   return (
     <VStack gap={20}>
       <HStack justify="space-between">
@@ -72,66 +84,110 @@ export const Job = () => {
       {errorMessage && (
         <SmallText color={colors.purple3}>{errorMessage}</SmallText>
       )}
-      {status === "INTERVIEW" && JobWithInterview && (
-        <InterviewBackground gap={16}>
-          <MediumText bold color={colors.neutralGray1}>Upcoming Interviews</MediumText>
-          <InterviewList>
-            {JobWithInterview.map((v, index) => (
-              <InterviewWrapper
-                key={index}
-                gap={10}
-                completed={v.interview.completed}
-                onClick={() => setSelectedJob(v.job)}
-              >
-                <VStack gap={10}>
-                  <HStack>
-                    <VStack gap={3}>
-                      <SmallText bold>{v.job.companyName}</SmallText>
-                      <SmallText>{v.job.jobTitle}</SmallText>
-                    </VStack>
-                    <VStack align="flex-end" gap={3}>
-                      <SmallText>
-                        {format(v.interview.interviewDateTime, "yyyy/MM/dd")}
-                      </SmallText>
-                      <SmallText color={colors.grayText}>
-                        {moment(v.interview.interviewDateTime).fromNow()}
-                      </SmallText>
-                    </VStack>
-                  </HStack>
-                  <SmallText>{v.interview.title}</SmallText>
+      {status === "INTERVIEW" &&
+        JobWithInterview &&
+        JobWithInterview.length > 0 && (
+          <UpcomingBackground gap={16} color="#d1f0ef">
+            <MediumText bold color="#008080">
+              Upcoming Interviews
+            </MediumText>
+            <InterviewList>
+              {JobWithInterview.map((v, index) => (
+                <InterviewWrapper
+                  key={index}
+                  gap={10}
+                  onClick={() => setSelectedJob(v.job)}
+                >
                   <VStack gap={10}>
-                    <TagContainer gap={12}>
-                      {v.tags.map((tag, index) => (
-                        <TagWrapper
-                          key={index}
-                          color={InterviewTags[tag].color}
-                          backgroundColor={InterviewTags[tag].backgroundColor}
-                          selected={v.tags.includes(tag)}
-                          completed={v.interview.completed}
-                        >
-                          <TagText
-                            hoveredColor={InterviewTags[tag].color}
-                            color={colors.grayText}
+                    <HStack>
+                      <VStack gap={3}>
+                        <SmallText bold>{v.job.companyName}</SmallText>
+                        <SmallText>{v.job.jobTitle}</SmallText>
+                      </VStack>
+                      <VStack align="flex-end" gap={3}>
+                        <SmallText>
+                          {format(v.interview.interviewDateTime, "yyyy/MM/dd")}
+                        </SmallText>
+                        <SmallText color={colors.grayText}>
+                          {moment(v.interview.interviewDateTime).fromNow()}
+                        </SmallText>
+                      </VStack>
+                    </HStack>
+                    <SmallText>{v.interview.title}</SmallText>
+                    <VStack gap={10}>
+                      <TagContainer gap={12}>
+                        {v.tags.map((tag, index) => (
+                          <TagWrapper
+                            key={index}
+                            color={InterviewTags[tag].color}
+                            backgroundColor={InterviewTags[tag].backgroundColor}
                             selected={v.tags.includes(tag)}
                             completed={v.interview.completed}
                           >
-                            {InterviewTags[tag].text}
-                          </TagText>
-                        </TagWrapper>
-                      ))}
-                    </TagContainer>
-                    {v.interview.note && (
+                            <TagText
+                              hoveredColor={InterviewTags[tag].color}
+                              color={colors.grayText}
+                              selected={v.tags.includes(tag)}
+                              completed={v.interview.completed}
+                            >
+                              {InterviewTags[tag].text}
+                            </TagText>
+                          </TagWrapper>
+                        ))}
+                      </TagContainer>
+                      {v.interview.note && (
+                        <NoteContainer>
+                          <SmallText>{v.interview.note}</SmallText>
+                        </NoteContainer>
+                      )}
+                    </VStack>
+                  </VStack>
+                </InterviewWrapper>
+              ))}
+            </InterviewList>
+          </UpcomingBackground>
+        )}
+      {(status === "INTERVIEW" || status === "APPLIED") &&
+        JobWithAssignment &&
+        JobWithAssignment.length > 0 && (
+          <UpcomingBackground gap={16} color="#FFE5D9">
+            <MediumText bold color="#FF5733">
+              Upcoming Assignments
+            </MediumText>
+            <InterviewList>
+              {JobWithAssignment.map((v, index) => (
+                <InterviewWrapper
+                  key={index}
+                  gap={10}
+                  onClick={() => setSelectedJob(v.job)}
+                >
+                  <VStack gap={8}>
+                    <HStack>
+                      <VStack gap={3}>
+                        <SmallText bold>{v.job.companyName}</SmallText>
+                        <SmallText>{v.job.jobTitle}</SmallText>
+                      </VStack>
+                      <VStack align="flex-end" gap={3}>
+                        <SmallText>
+                          {format(v.assignment.deadlineDatetime, "yyyy/MM/dd")}
+                        </SmallText>
+                        <SmallText color={colors.grayText}>
+                          {moment(v.assignment.deadlineDatetime).fromNow()}
+                        </SmallText>
+                      </VStack>
+                    </HStack>
+                    <SmallText>{v.assignment.title}</SmallText>
+                    {v.assignment.note && (
                       <NoteContainer>
-                        <SmallText>{v.interview.note}</SmallText>
+                        <SmallText>{v.assignment.note}</SmallText>
                       </NoteContainer>
                     )}
                   </VStack>
-                </VStack>
-              </InterviewWrapper>
-            ))}
-          </InterviewList>
-        </InterviewBackground>
-      )}
+                </InterviewWrapper>
+              ))}
+            </InterviewList>
+          </UpcomingBackground>
+        )}
       <JobList>
         {data?.map((job, index) => (
           <StyledWhitePanel key={index} onClick={() => setSelectedJob(job)}>
@@ -192,8 +248,8 @@ const StyledSmallText = styled(SmallText)`
   font-size: 12px;
 `;
 
-const InterviewBackground = styled(VStack)`
-  background-color: ${colors.purple3}90;
+const UpcomingBackground = styled(VStack)<{ color: string }>`
+  background-color: ${(p) => p.color};
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 0 4px rgba(50, 50, 50, 0.3);
@@ -205,10 +261,10 @@ const InterviewList = styled.div`
   width: 100%;
 `;
 
-const InterviewWrapper = styled(VStack)<{ completed: boolean }>`
+const InterviewWrapper = styled(VStack)`
   padding: 20px;
   border-radius: 8px;
-  background-color: ${(p) => (p.completed ? colors.softSilver : colors.white)};
+  background-color: ${colors.white};
   box-shadow: 0 0 4px rgba(50, 50, 50, 0.3);
   width: calc((100% - 40px) / 3);
 
