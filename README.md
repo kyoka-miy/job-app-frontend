@@ -24,12 +24,11 @@ Frontend application for job application tracker web application.
 3. Install dependencies:
    ```bash
    npm install
-# or
+   # or
    yarn install
-   ```
+
 4. Run the application:
    ```bash
    npm start
-# or
+   # or
    yarn start
-   ```
