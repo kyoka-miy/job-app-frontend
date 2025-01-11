@@ -17,6 +17,7 @@ type Props = {
   title?: string;
   required?: boolean;
   className?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
 export const TextInput: React.FC<Props> = ({
@@ -31,6 +32,7 @@ export const TextInput: React.FC<Props> = ({
   required = false,
   width = "100%",
   className,
+  onKeyDown = () => {},
   ...props
 }) => {
   const [isTouched, setIsTouched] = useState(false);
@@ -79,6 +81,7 @@ export const TextInput: React.FC<Props> = ({
           isValid={isValid}
           width={width}
           className={className}
+          onKeyDown={onKeyDown}
           {...props}
         />
       )}

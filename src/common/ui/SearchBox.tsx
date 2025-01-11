@@ -6,8 +6,9 @@ import { colors } from "../styles";
 type Props = {
   placeholder?: string;
   errorMessage?: string;
-  value?: string;
-  onChange?: (v: any) => void;
+  value: string;
+  onChange: (v: any) => void;
+  onSubmit: () => void;
   disabled?: boolean;
   width?: number | string;
   height?: number;
@@ -16,10 +17,21 @@ type Props = {
   title?: string;
   required?: boolean;
 };
-export const SearchBox = ({ width, value, placeholder }: Props) => {
+export const SearchBox = ({ width, value, placeholder, onChange, onSubmit }: Props) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      onSubmit();
+    }
+  };
   return (
     <StyledWrapper>
-      <StyledTextInput width={width} placeholder={placeholder} value={value} />
+      <StyledTextInput
+        width={width}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        onKeyDown={handleKeyDown}
+      />
       <StyledSearchIcon color={colors.foggyGray} />
     </StyledWrapper>
   );

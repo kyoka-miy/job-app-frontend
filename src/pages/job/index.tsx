@@ -29,11 +29,14 @@ export const Job = () => {
   const [status, setStatus] = useState<keyof typeof JobStatus>("WISHLIST");
   const [showAddJobModal, setShowAddJobModal] = useState<boolean>(false);
   const [selectedJob, setSelectedJob] = useState<JobDto | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
+  const [showUpcoming, setShowUpcoming] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { data, refetch } = useFetch<JobDto[]>({
     url: CONSTANTS.ENDPOINT.JOBS,
     params: {
       status: status,
+      text: searchText,
     },
     onError: (err) => {
       setErrorMessage(err);
@@ -58,7 +61,17 @@ export const Job = () => {
     },
     shouldFetch: true,
   });
-
+  const onTabChange = (v: keyof typeof JobStatus) => {
+    setStatus(v);
+    setShowUpcoming(true);
+    setSearchText("");
+  };
+  const onSearch = () => {
+    if (searchText.length > 0) {
+      refetch();
+      setShowUpcoming(false);
+    }
+  };
   return (
     <VStack gap={20}>
       <HStack justify="space-between" align="center">
@@ -67,7 +80,7 @@ export const Job = () => {
             (v) => (
               <HStack align="center" gap={6} key={v}>
                 <Tab
-                  onClick={() => setStatus(v)}
+                  onClick={() => onTabChange(v)}
                   selected={status === v}
                   color={v === "REJECTED" ? colors.grayText : colors.deepSlate}
                 >
@@ -78,15 +91,23 @@ export const Job = () => {
             )
           )}
         </HStack>
-        <SearchBox width={280}/>
-        <Button onClick={() => setShowAddJobModal(true)} bold plusIcon>
-          Add Job
-        </Button>
+        <HStack gap={40}>
+          <SearchBox
+            width={280}
+            value={searchText}
+            onChange={setSearchText}
+            onSubmit={onSearch}
+          />
+          <Button onClick={() => setShowAddJobModal(true)} bold plusIcon>
+            Add Job
+          </Button>
+        </HStack>
       </HStack>
       {errorMessage && (
         <SmallText color={colors.purple3}>{errorMessage}</SmallText>
       )}
       {status === "INTERVIEW" &&
+        showUpcoming &&
         JobWithInterview &&
         JobWithInterview.length > 0 && (
           <UpcomingBackground gap={16} color="#d1f0ef">
@@ -150,6 +171,7 @@ export const Job = () => {
           </UpcomingBackground>
         )}
       {(status === "INTERVIEW" || status === "APPLIED") &&
+        showUpcoming &&
         JobWithAssignment &&
         JobWithAssignment.length > 0 && (
           <UpcomingBackground gap={16} color="#FFE5D9">
@@ -213,7 +235,7 @@ export const Job = () => {
           width="85%"
           innerWidth="85%"
         >
-          <JobInfo />
+          <JobInfo status={status}/>
         </Modal>
       )}
       {selectedJob && (

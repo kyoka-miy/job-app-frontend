@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Header } from "./Header";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { CONSTANTS } from "../constants";
 import { Job } from "./job";
 import { Profile } from "./profile";

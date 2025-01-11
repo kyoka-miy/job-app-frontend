@@ -18,9 +18,10 @@ import styled from "styled-components";
 
 type Props = {
   selectedJob?: JobDto;
+  status?: keyof typeof JobStatus;
 };
 
-export const JobInfo = ({ selectedJob }: Props) => {
+export const JobInfo = ({ selectedJob, status }: Props) => {
   const {
     jobData,
     handleInputChange,
@@ -107,7 +108,10 @@ export const JobInfo = ({ selectedJob }: Props) => {
               <HoverMenu
                 options={placeSuggestionOptions}
                 onClick={(v) => handleLocationChange(v)}
-                onClose={() => setShowSuggestions(false)}
+                onClose={() => {
+                  setShowSuggestions(false);
+                  handleInputChange("", "location");
+                }}
                 top={72}
               />
             )}
@@ -126,7 +130,7 @@ export const JobInfo = ({ selectedJob }: Props) => {
         />
         <SelectBox
           options={statusOptions}
-          value={JobStatus[jobData.status]}
+          value={status ? JobStatus[status] : JobStatus[jobData.status]}
           onChange={(name) => handleInputChange(name, "status")}
           title="Status"
         />
