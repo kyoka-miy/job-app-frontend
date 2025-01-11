@@ -15,3 +15,4 @@ export * from "./AssignmentIcon";
 export * from "./FaceIcon";
 export * from "./EditIcon";
 export * from "./TrashIcon";
+export * from "./SearchIcon";

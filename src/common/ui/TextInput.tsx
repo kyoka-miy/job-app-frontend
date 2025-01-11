@@ -16,6 +16,7 @@ type Props = {
   validate?: (v: any) => boolean;
   title?: string;
   required?: boolean;
+  className?: string;
 };
 
 export const TextInput: React.FC<Props> = ({
@@ -29,6 +30,7 @@ export const TextInput: React.FC<Props> = ({
   title,
   required = false,
   width = "100%",
+  className,
   ...props
 }) => {
   const [isTouched, setIsTouched] = useState(false);
@@ -76,6 +78,7 @@ export const TextInput: React.FC<Props> = ({
           value={value}
           isValid={isValid}
           width={width}
+          className={className}
           {...props}
         />
       )}

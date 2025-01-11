@@ -23,6 +23,7 @@ import moment from "moment";
 import { JobDetailModal } from "./job-detail-modal/JobDetailModal";
 import { JobInfo } from "./job-detail-modal/info/JobInfo";
 import { format } from "date-fns";
+import { SearchBox } from "../../common/ui/SearchBox";
 
 export const Job = () => {
   const [status, setStatus] = useState<keyof typeof JobStatus>("WISHLIST");
@@ -60,7 +61,7 @@ export const Job = () => {
 
   return (
     <VStack gap={20}>
-      <HStack justify="space-between">
+      <HStack justify="space-between" align="center">
         <HStack>
           {(Object.keys(JobStatus) as Array<keyof typeof JobStatus>).map(
             (v) => (
@@ -77,6 +78,7 @@ export const Job = () => {
             )
           )}
         </HStack>
+        <SearchBox width={280}/>
         <Button onClick={() => setShowAddJobModal(true)} bold plusIcon>
           Add Job
         </Button>
