@@ -4,7 +4,7 @@ Frontend application for job application tracker web application.
 
 ### Live Demo
 
-[[https://job-app-frontend-2fvw8t3in-kyokamiys-projects.vercel.app](https://job-app-frontend-nine.vercel.app)](#)
+[https://job-app-frontend-2fvw8t3in-kyokamiys-projects.vercel.app](https://job-app-frontend-nine.vercel.app)(#)
 
 ## Getting Started
 
