@@ -35,6 +35,7 @@ export const JobInfo = ({ selectedJob, status }: Props) => {
     addJob,
     errorMessage,
   } = useJob({ initJobData: selectedJob });
+  if (status) handleInputChange(JobStatus[status], "status");
 
   return (
     <VStack gap={18}>
@@ -130,7 +131,7 @@ export const JobInfo = ({ selectedJob, status }: Props) => {
         />
         <SelectBox
           options={statusOptions}
-          value={status ? JobStatus[status] : JobStatus[jobData.status]}
+          value={JobStatus[jobData.status]}
           onChange={(name) => handleInputChange(name, "status")}
           title="Status"
         />
