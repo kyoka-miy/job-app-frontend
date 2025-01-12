@@ -15,6 +15,7 @@ import { colors } from "../../../../common/styles";
 import { ValidationUtil } from "../../../../common/utils/validation";
 import { JobStatus, statusOptions, WorkStyle } from "../../../../constants";
 import styled from "styled-components";
+import { useEffect } from "react";
 
 type Props = {
   selectedJob?: JobDto;
@@ -35,7 +36,10 @@ export const JobInfo = ({ selectedJob, status }: Props) => {
     addJob,
     errorMessage,
   } = useJob({ initJobData: selectedJob });
-  if (status) handleInputChange(JobStatus[status], "status");
+
+  useEffect(() => {
+    if (status) handleInputChange(status, "status");
+  }, [status, handleInputChange]);
 
   return (
     <VStack gap={18}>
