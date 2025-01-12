@@ -26,10 +26,8 @@ Frontend application for job application tracker web application.
    npm install
 # or
    yarn install
-   ```
 4. Run the application:
    ```bash
    npm start
 # or
    yarn start
-   ```
