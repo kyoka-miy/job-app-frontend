@@ -4,9 +4,11 @@ Frontend application for job application tracker web application.
 
 ### Live Demo
 
-<a href="https://job-app-frontend-nine.vercel.app" target="_blank">https://job-app-frontend-nine.vercel.app</a>
+[https://job-app-frontend-2fvw8t3in-kyokamiys-projects.vercel.app](https://job-app-frontend-nine.vercel.app)
 
-## Getting Started
+### Document
+
+[https://pewter-wire-c5a.notion.site/Job-Application-Tracker-178128ac717c80b49a4ceef745f1b4ae](https://pewter-wire-c5a.notion.site/Job-Application-Tracker-178128ac717c80b49a4ceef745f1b4ae)
 
 ### Prerequisites
 
