@@ -26,7 +26,7 @@ const MapWithPins: React.FC = () => {
   const { allJobs, refetchAllJobs } = useJob();
   useEffect(() => {
     refetchAllJobs();
-  }, [refetchAllJobs]);
+  }, []);
   const center: [number, number] = [38.9072, -77.0369]; // Washington, D.C.
   return (
     <StyledMapContainer center={center} zoom={4}>
