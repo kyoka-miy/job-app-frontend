@@ -53,7 +53,6 @@ export const Job = () => {
     },
     shouldFetch: true,
   });
-
   const { data: JobWithAssignment } = useFetch<JobWithAssignmentDto[]>({
     url: CONSTANTS.ENDPOINT.JOBS_ASSIGNMENTS,
     onError: (err) => {
@@ -235,7 +234,7 @@ export const Job = () => {
           width="85%"
           innerWidth="85%"
         >
-          <JobInfo status={status}/>
+          <JobInfo status={status} />
         </Modal>
       )}
       {selectedJob && (

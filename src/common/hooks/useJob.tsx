@@ -13,7 +13,19 @@ export const useJob = ({ initJobData }: Props = {}) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [jobData, setJobData] = useState<AddOrUpdateJobRequest>(
     initJobData
-      ? initJobData
+      ? {
+          companyName: initJobData.companyName,
+          jobTitle: initJobData.jobTitle,
+          appliedDate: initJobData.addedDatetime,
+          url: initJobData.url,
+          location: initJobData.location,
+          placeId: initJobData.placeId,
+          salary: initJobData.salary,
+          jobBoard: initJobData.jobBoard,
+          status: initJobData.status,
+          workStyle: initJobData.workStyle,
+          note: initJobData.note,
+        }
       : {
           companyName: "",
           jobTitle: "",
@@ -30,7 +42,13 @@ export const useJob = ({ initJobData }: Props = {}) => {
   );
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
-  // job add, update, delete api requests
+  // job get, add, update, delete api requests
+  const { data: allJobs, refetch: refetchAllJobs } = useFetch<JobDto[]>({
+    url: CONSTANTS.ENDPOINT.JOBS,
+    onError: (err) => {
+      setErrorMessage(err);
+    },
+  });
   const { doPost: addJob } = usePost({
     url: CONSTANTS.ENDPOINT.JOBS,
     onSuccess: () => window.location.reload(),
@@ -135,6 +153,8 @@ export const useJob = ({ initJobData }: Props = {}) => {
     placeSuggestionOptions,
     handleLocationChange,
     handleCheckBoxChange,
+    allJobs,
+    refetchAllJobs,
     addJob,
     updateJob,
     deleteJob,

@@ -8,6 +8,9 @@ export type JobDto = {
   companyName: string;
   url?: string;
   location?: string;
+  placeId?: string;
+  latitude?: number;
+  longitude?: number;
   salary?: string;
   workStyle?: keyof typeof WorkStyle;
   status: keyof typeof JobStatus;

@@ -5,6 +5,7 @@ import { CONSTANTS } from "../constants";
 import { Job } from "./job";
 import { Profile } from "./profile";
 import { Boards } from "./boards";
+import MapWithPins from "./map";
 
 export const Home = () => {
   return (
@@ -13,6 +14,7 @@ export const Home = () => {
       <ContentArea>
         <Routes>
           <Route path={CONSTANTS.LINK.JOB} element={<Job />} />
+          <Route path={CONSTANTS.LINK.MAP} element={<MapWithPins />} />
           <Route path={CONSTANTS.LINK.PROFILE} element={<Profile />} />
           <Route path={CONSTANTS.LINK.BOARDS} element={<Boards />} />
         </Routes>
@@ -32,4 +34,5 @@ const ContentArea = styled.div`
   width: 85%;
   margin: 0 auto;
   padding: 40px 0px;
+  height: 100vh;
 `;

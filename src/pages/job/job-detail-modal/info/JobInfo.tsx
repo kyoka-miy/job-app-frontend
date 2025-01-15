@@ -36,7 +36,7 @@ export const JobInfo = ({ selectedJob, status }: Props) => {
     addJob,
     errorMessage,
   } = useJob({ initJobData: selectedJob });
-
+  
   useEffect(() => {
     if (status) handleInputChange(status, "status");
   }, [status, handleInputChange]);
